@@ -20,13 +20,14 @@
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_weight="2"
-                        android:layout_height="0dp" />
+                        android:layout_height="200dp" />
 
                     <!-- TODO: Динамически добавляющиеся кнопки или невидимые? -->
 
                     <Button
                         android:id = "@+id/graph1"
                         android:text="Тут скриншот графика 1"
+                        android:drawableBottom="@drawable/graph_standart"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -36,21 +37,34 @@
                     <Button
                         android:id = "@+id/graph2"
                         android:text="Тут скриншот графика 2"
+                        android:drawableBottom="@drawable/graph_standart"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_height="0dp" />
-
 
                     <Button
-                        android:id = "@+id/new_graph"
-                        android:text="+"
+                        android:id = "@+id/graph3"
+                        android:text="Тут скриншот графика 3"
+                        android:drawableBottom="@drawable/graph_standart"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_height="0dp" />
+
+                    <!-- TODO: Придумать способ как добавлять новый график -->
+                    <ImageButton
+                        android:id = "@+id/new_graph"
+                        android:src="@drawable/ic_add_black_36dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+
+
                     
                 </LinearLayout>
 
