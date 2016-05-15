@@ -30,19 +30,21 @@ import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 
 public class MainActivity extends Activity {
+
+    // Слушатель для выдвижной панели, ожидание щелчка на списке
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
-    };
+    }
 
     private ShareActionProvider shareActionProvider;
-    private String[] titles;
-    private ListView drawerList;
+    private String[] titles;    // список активностей в боковой панели
+    private ListView drawerList;    // боковая панель
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private int currentPosition = 0;
+    private int currentPosition = 0;    // Используем для корректного отображенеи информации в фрагментах и панели действий
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +53,18 @@ public class MainActivity extends Activity {
 
         // Заполнение массива для выдвижной пенели
         // simple_list_item_activated_1 - подсветка выбранного варианта
-        titles = getResources().getStringArray(R.array.titles);
+        titles = getResources().getStringArray(R.array.titles_drawer);
         drawerList = (ListView)findViewById(R.id.drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList.setAdapter(new ArrayAdapter<String>(this,
                                                        android.R.layout.simple_list_item_activated_1, titles));
+
+        // Слушать щелчка на списке в боковой панели
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        //TODO: Что это?
-        //Display the correct fragment.
+        // Востановление фрагмента
         if (savedInstanceState != null) {
+            // Если не первое испольщование фрагмента, отобразим корректную информацию где сейчас пользователь
             currentPosition = savedInstanceState.getInt("position");
             setActionBarTitle(currentPosition);
         } else {
@@ -75,37 +79,50 @@ public class MainActivity extends Activity {
                 @Override
                 public void onDrawerClosed(View view) {
                     super.onDrawerClosed(view);
+
+
                     invalidateOptionsMenu();
                 }
                 // Вызывается при переходе выдвижной панели в полностью открытое состояние.
                 @Override
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
+
+                    // Приказ Android щаново создать команды меню
                     invalidateOptionsMenu();
                 }
             };
 
         // Назначить слушателя для DrawerLayout
         drawerLayout.setDrawerListener(drawerToggle);
+
+        // Включить кнопку вверх
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+
+        // Для корректного дейсвия для кнопки назад
         getFragmentManager().addOnBackStackChangedListener(
                                                            new FragmentManager.OnBackStackChangedListener() {
                                                                public void onBackStackChanged() {
+                                                                   // Найдем фрагмент который сейчас связан с MainActivity, его мы пометили тэгом visible_fragment
                                                                    FragmentManager fragMan = getFragmentManager();
                                                                    Fragment fragment = fragMan.findFragmentByTag("visible_fragment");
+
+                                                                   // Проверка к какому типу относиться фрагмент и присвоим верное значение currentPosition
                                                                    if (fragment instanceof TopFragment) {
                                                                        currentPosition = 0;
                                                                    }
-                                                                   if (fragment instanceof PizzaFragment) {
+                                                                   if (fragment instanceof ServiceFragment) {
                                                                        currentPosition = 1;
                                                                    }
-                                                                   if (fragment instanceof PastaFragment) {
+                                                                   if (fragment instanceof SettingsFragment) {
                                                                        currentPosition = 2;
                                                                    }
-                                                                   if (fragment instanceof StoresFragment) {
+                                                                   if (fragment instanceof ReferenceFragment) {
                                                                        currentPosition = 3;
                                                                    }
+
+                                                                   // Вывести текст на панели действий и выделить правильный вариант в списке на выдвижной панели
                                                                    setActionBarTitle(currentPosition);
                                                                    drawerList.setItemChecked(currentPosition, true);
                                                                }
@@ -115,30 +132,33 @@ public class MainActivity extends Activity {
 
     // Обработка щелчков в выжвижной панели
     private void selectItem(int position) {
-        // update the main content by replacing fragments
+        // Обновить информацию заменой фрагмента
         currentPosition = position;
         Fragment fragment;
         switch(position) {
         case 1:
-            fragment = new PizzaFragment();
+            fragment = new ServiceFragment();
             break;
         case 2:
-            fragment = new PastaFragment();
+            fragment = new SettingsFragment();
             break;
         case 3:
-            fragment = new StoresFragment();
+            fragment = new ReferenceFragment();
             break;
         default:
             fragment = new TopFragment();
         }
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        // !!! Передаем тэг visible_fragment - он используется для того что бы знать какой фрагмент сейчас выводиться
         ft.replace(R.id.content_frame, fragment, "visible_fragment");
         ft.addToBackStack(null);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
-        //Set the action bar title
+
+        // Назначение заголовка панели действий
         setActionBarTitle(position);
-        //Close drawer
+        // Задвинуть боковую панель для удобства пользователя
         drawerLayout.closeDrawer(drawerList);
     }
 
@@ -158,14 +178,14 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    // При изменение конфигурации - передать новые данные
+    // При изменение конфигурации - передать новые данные для ActionBarDrawerToggle
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
-    // Исправление проблемы при переворачивание экрана
+    // Исправление проблемы при переворачивание экрана - сохранение состояния
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("position", currentPosition);
@@ -174,11 +194,14 @@ public class MainActivity extends Activity {
     // Корректный вывод надписи в меню действий
     private void setActionBarTitle(int position) {
         String title;
+        // Если пользователь выбирает первый вариант - Home, используем название приложения
         if (position == 0) {
             title = getResources().getString(R.string.app_name);
         } else {
+            // Иначе получим из массива элемент соответсующий пощиции выбранного элемента
             title = titles[position];
         }
+        // Вывести заголовок на панели действий
         getActionBar().setTitle(title);
     }
 
@@ -192,7 +215,7 @@ public class MainActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    // TODO: Похоже на код для кнопки SHARE
+    // Назначит действию Share интент для передачи информации
     private void setIntent(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -201,7 +224,7 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    // TODO: ХЗ что это
+    // Этот метод вызывается когда пользователь шелкает на элементе на панели действий
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;

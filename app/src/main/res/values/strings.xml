@@ -1,34 +1,24 @@
 <resources>
   <string name="app_name">GraphAgregator</string>
 
-  <string name="hello_world">Hello world!</string>
+  <!-- TODO: Временный текст, удалить -->
+  <string name="title_top">Top fragment</string>
+  <string name="title_service">Add service</string>
+  <string name="title_settings">Settings</string>
+  <string name="title_reference">Reference</string>
+  <string name="title_activity_order">Временная активность, удалить</string>
+
+  <!-- Панель меню действий-->
   <string name="action_settings">Settings</string>
   <string name="action_create_order">Create Order</string>
-  <string name="title_activity_order">Order Activity</string>
   <string name="action_share">Share</string>
 
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
-  <string name="title_top">Top fragment</string>
-  <string-array name="pizzas">
-    <item>Diavolo</item>
-    <item>Funghi</item>
-  </string-array>
-  <string-array name="pasta">
-    <item>Spaghetti Bolognese</item>
-    <item>Lasagne</item>
-  </string-array>
-  <string-array name="stores">
-    <item>Cambridge</item>
-    <item>Sebastopol</item>
-  </string-array>
-
-  <!-- Меню в выдвижной панели-->
-  <string-array name="titles">
+  <!-- Название фрагментов для боковой панели -->
+  <string-array name="titles_drawer">
     <item>Home</item>
-    <item>Pizzas</item>
-    <item>Pasta</item>
-    <item>Stores</item>
+    <item>Service</item>
+    <item>Settings</item>
+    <item>Reference</item>
   </string-array>
 
   <!-- Состояние выдвижной панели -->
