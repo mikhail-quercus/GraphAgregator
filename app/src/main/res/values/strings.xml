@@ -22,12 +22,16 @@
     <item>Cambridge</item>
     <item>Sebastopol</item>
   </string-array>
+
+  <!-- Меню в выдвижной панели-->
   <string-array name="titles">
     <item>Home</item>
     <item>Pizzas</item>
     <item>Pasta</item>
     <item>Stores</item>
   </string-array>
+
+  <!-- Состояние выдвижной панели -->
   <string name="open_drawer">Open drawer</string>
   <string name="close_drawer">Close drawer</string>
 </resources>
