@@ -1,6 +1,10 @@
 <resources>
   <string name="app_name">GraphAgregator</string>
 
+  <!-- TopFragment -->
+  <string name="top_day_text">Небольшая информация о тексте дня</string>
+
+
   <!-- TODO: Временный текст, удалить -->
   <string name="title_top">Top fragment</string>
   <string name="title_service">Add service</string>

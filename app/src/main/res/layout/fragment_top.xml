@@ -1,10 +1,57 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="com.hfad.graphagregator.MainActivity">
-  <TextView
-      android:text="@string/title_top"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
-</RelativeLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/top_day_text"
+                        android:text="@string/top_day_text"
+                        android:gravity="top"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_height="0dp" />
+
+                    <!-- TODO: Динамически добавляющиеся кнопки или невидимые? -->
+
+                    <Button
+                        android:id = "@+id/graph1"
+                        android:text="Тут скриншот графика 1"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+
+                    <Button
+                        android:id = "@+id/graph2"
+                        android:text="Тут скриншот графика 2"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+
+
+                    <Button
+                        android:id = "@+id/new_graph"
+                        android:text="+"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+                    
+                </LinearLayout>
+
+</ScrollView>
