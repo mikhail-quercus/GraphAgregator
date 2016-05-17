@@ -145,6 +145,9 @@ public class MainActivity extends Activity {
         case 3:
             fragment = new ReferenceFragment();
             break;
+        case 4:
+            fragment = new PieChartFragment();
+            break;
         default:
             fragment = new TopFragment();
         }
@@ -166,7 +169,11 @@ public class MainActivity extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // Если выдвижная панель открыта - спрятать кнопки на панели действий
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
-        menu.findItem(R.id.action_share).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_mode).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_done).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_delete).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_sync).setVisible(!drawerOpen);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -230,11 +237,14 @@ public class MainActivity extends Activity {
             return true;
         }
         switch (item.getItemId()) {
-        case R.id.action_create_order:
+        /*
+            TODO: Полезный фрагмент
+            case R.id.action_create_order:
             //Code to run when the Create Order item is clicked
             Intent intent = new Intent(this, OrderActivity.class);
             startActivity(intent);
             return true;
+            */
         case R.id.action_settings:
             //Code to run when the settings item is clicked
             return true;
