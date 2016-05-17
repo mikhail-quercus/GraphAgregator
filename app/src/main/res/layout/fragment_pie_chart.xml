@@ -1,12 +1,46 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_column="10"
     tools:context="com.hfad.graphagregator.PieChartFragment">
+
+    <Button
+        android:id = "@+id/arrow_left"
+        android:text="J"
+        android:layout_row="0"
+        android:layout_column="0" />
+
+    <TextView
+        android:id = "@+id/allow_text"
+        android:text="Monday, 26 may"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_columnSpan="4" />
+
+    <Button
+        android:id = "@+id/arrow_right"
+        android:text="L"
+        android:layout_row="0"
+        android:layout_column="5" />
+
+    <Spinner
+        android:id = "@+id/calculation_system_data"
+        android:layout_row="0"
+        android:layout_column="7"
+        android:layout_columnSpan="3"
+        android:entries="@array/calculation_system_data"
+        android:layout_width="wrap_content" />
+
+
+
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_columnSpan="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</FrameLayout>
+</GridLayout>

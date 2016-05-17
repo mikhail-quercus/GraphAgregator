@@ -55,9 +55,9 @@
                         android:layout_height="0dp" />
 
                     <!-- TODO: Придумать способ как добавлять новый график -->
-                    <ImageButton
-                        android:id = "@+id/new_graph"
-                        android:src="@drawable/ic_add_black_36dp"
+                    <Button
+                        android:id = "@+id/graph_new"
+                        android:drawableStart="@drawable/ic_add_black_36dp"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"

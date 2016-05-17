@@ -28,8 +28,16 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TopFragment.OnSelectedButtonGraphListener{
+
+    // Слушатель кнопок в классе TopFragment
+    @Override
+    public void onButtonGraphSelected(int buttonIndex) {
+        int position = buttonIndex + 10;
+        selectItem(position);
+    }
 
     // Слушатель для выдвижной панели, ожидание щелчка на списке
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -38,6 +46,7 @@ public class MainActivity extends Activity {
             selectItem(position);
         }
     }
+
 
     private ShareActionProvider shareActionProvider;
     private String[] titles;    // список активностей в боковой панели
@@ -132,6 +141,7 @@ public class MainActivity extends Activity {
 
     // Обработка щелчков в выжвижной панели
     private void selectItem(int position) {
+
         // Обновить информацию заменой фрагмента
         currentPosition = position;
         Fragment fragment;
@@ -145,8 +155,20 @@ public class MainActivity extends Activity {
         case 3:
             fragment = new ReferenceFragment();
             break;
-        case 4:
+        case 10:
+            Toast.makeText(this, "Создание нового графика", Toast.LENGTH_SHORT).show();
+            fragment = new TopFragment();
+            break;
+        case 10+1:
             fragment = new PieChartFragment();
+            break;
+        case 10+2:
+            Toast.makeText(this, "Не реализовано", Toast.LENGTH_SHORT).show();
+            fragment = new TopFragment();
+            break;
+        case 10+3:
+            Toast.makeText(this, "Не реализовано", Toast.LENGTH_SHORT).show();
+            fragment = new TopFragment();
             break;
         default:
             fragment = new TopFragment();
@@ -205,8 +227,17 @@ public class MainActivity extends Activity {
         if (position == 0) {
             title = getResources().getString(R.string.app_name);
         } else {
+
             // Иначе получим из массива элемент соответсующий пощиции выбранного элемента
-            title = titles[position];
+            try {
+                title = titles[position];
+            }
+            catch (Exception ex)
+            {
+                // TODO: Проблема с выходом за область массива - решить
+                // TODO: Получать корректное имя
+                title = "null";
+            }
         }
         // Вывести заголовок на панели действий
         getActionBar().setTitle(title);

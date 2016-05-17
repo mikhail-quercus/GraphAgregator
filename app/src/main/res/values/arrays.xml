@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Для графика - переключение между системами счисления-->
+    <string-array name="calculation_system_data">
+        <item>Daily</item>
+        <item>Monthly</item>
+        <item>Quarterly</item>
+        <item>Annual</item>
+    </string-array>
+
+    <!-- Настройки - частота обновления -->
+    <string-array name="update_frequency" >
+        <item>When run app</item>
+        <item>Each hour</item>
+        <item>Everyday</item>
+        <item>Everyweek</item>
+        <item>Never</item>
+    </string-array>
+</resources>
