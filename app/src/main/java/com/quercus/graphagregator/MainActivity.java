@@ -1,4 +1,4 @@
-package com.hfad.graphagregator;
+package com.quercus.graphagregator;
 
 import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;

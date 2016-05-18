@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hfad.graphagregator" >
+    package="com.quercus.graphagregator" >
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.hfad.graphagregator.MainActivity"
+            android:name="com.quercus.graphagregator.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,12 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.hfad.graphagregator.OrderActivity"
+            android:name="com.quercus.graphagregator.OrderActivity"
             android:label="@string/title_activity_order"
-            android:parentActivityName="com.hfad.graphagregator.MainActivity">
+            android:parentActivityName="com.quercus.graphagregator.MainActivity">
           <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.hfad.graphagregator.MainActivity" />
+              android:value="com.quercus.graphagregator.MainActivity" />
         </activity>
     </application>
 

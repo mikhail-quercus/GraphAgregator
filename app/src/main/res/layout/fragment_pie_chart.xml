@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_column="10"
-    tools:context="com.hfad.graphagregator.PieChartFragment">
+    tools:context="com.quercus.graphagregator.PieChartFragment">
 
     <Button
         android:id = "@+id/arrow_left"
