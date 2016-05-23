@@ -19,6 +19,11 @@ android {
     }
 }
 
+// GoogleFit
+dependencies {
+    compile 'com.google.android.gms:play-services-fitness:8.4.0'
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'

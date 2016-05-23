@@ -6,7 +6,6 @@
         <item>Daily</item>
         <item>Monthly</item>
         <item>Quarterly</item>
-        <item>Annual</item>
     </string-array>
 
     <!-- Настройки - частота обновления -->

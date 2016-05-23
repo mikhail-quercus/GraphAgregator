@@ -54,7 +54,8 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private int currentPosition = 0;    // Используем для корректного отображенеи информации в фрагментах и панели действий
-    
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

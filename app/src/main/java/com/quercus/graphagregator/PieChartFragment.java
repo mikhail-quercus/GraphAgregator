@@ -1,12 +1,14 @@
 package com.quercus.graphagregator;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-// Библиотекап для работы с графиками
+// Библиотека для работы с графиками
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -17,11 +19,22 @@ import java.util.ArrayList;
 
 public class PieChartFragment extends Fragment {
 
+    GraphDatabaseHelper dbHelper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_pie_chart, container, false);
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Используем getActivity() а не this - т.к. фрагмент
+        dbHelper = new GraphDatabaseHelper(getActivity());
+    }
+
 
     @Override
     public void onStart(){
@@ -32,6 +45,11 @@ public class PieChartFragment extends Fragment {
             // Получили ссылка на макет графика
             PieChart pieChart = (PieChart)view.findViewById(R.id.pie_chart);
 
+            // Получили БД для работы с ней
+            SQLiteDatabase database = dbHelper.getWritableDatabase();
+            // Запишем данные
+            dbHelper.writeData(database);
+
             // Массив необработанных графиков
             ArrayList<Entry> entries = new ArrayList<>();
             entries.add(new Entry(4f, 0));
@@ -40,6 +58,9 @@ public class PieChartFragment extends Fragment {
             entries.add(new Entry(2f, 3));
             entries.add(new Entry(18f, 4));
             entries.add(new Entry(9f, 5));
+
+
+
 
             // данные dataset
             PieDataSet dataset = new PieDataSet(entries, "# of Calls");
