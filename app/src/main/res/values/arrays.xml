@@ -4,8 +4,33 @@
     <!-- Для графика - переключение между системами счисления-->
     <string-array name="calculation_system_data">
         <item>Daily</item>
+        <item>Weekly</item>
         <item>Monthly</item>
-        <item>Quarterly</item>
+    </string-array>
+
+    <string-array name="name_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sanday</item>
+    </string-array>
+
+    <string-array name="name_month">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 
     <!-- Настройки - частота обновления -->
@@ -16,4 +41,11 @@
         <item>Everyweek</item>
         <item>Never</item>
     </string-array>
+
+    <!-- Сервисы с которых будем получать данные -->
+    <string-array name="services">
+        <item>Google Fit</item>
+        <item>ResqueTime</item>
+    </string-array>
+
 </resources>

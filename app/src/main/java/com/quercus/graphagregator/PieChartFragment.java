@@ -19,8 +19,6 @@ import java.util.ArrayList;
 
 public class PieChartFragment extends Fragment {
 
-    GraphDatabaseHelper dbHelper;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,9 +28,6 @@ public class PieChartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Используем getActivity() а не this - т.к. фрагмент
-        dbHelper = new GraphDatabaseHelper(getActivity());
     }
 
 
@@ -45,10 +40,6 @@ public class PieChartFragment extends Fragment {
             // Получили ссылка на макет графика
             PieChart pieChart = (PieChart)view.findViewById(R.id.pie_chart);
 
-            // Получили БД для работы с ней
-            SQLiteDatabase database = dbHelper.getWritableDatabase();
-            // Запишем данные
-            dbHelper.writeData(database);
 
             // Массив необработанных графиков
             ArrayList<Entry> entries = new ArrayList<>();

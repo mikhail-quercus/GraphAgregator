@@ -11,8 +11,8 @@ import java.util.Random;
 public class GraphDatabaseHelper  extends SQLiteOpenHelper{
 
     public static final int DB_VERSION = 2;
-    public static final String DB_NAME = "contactDb";
-    public static final String DB_TABLE_NAME = "contacts";
+    public static final String DB_NAME = "GraphDb";
+    public static final String DB_TABLE_NAME = "Data";
 
     public static final String KEY_ID = "_id";
     public static final String KEY_DATE = "date";
@@ -36,12 +36,13 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper{
     }
 
 
-    public void writeData(SQLiteDatabase db){
-
-        // Очистим БД и заполним своими значениями
+    public void clearData(SQLiteDatabase db){
         db.execSQL("drop table if exists " + DB_TABLE_NAME);
         onCreate(db);
+    }
 
+
+    public void writeData(SQLiteDatabase db){
         final Random random = new Random();
 
         Calendar start_year = Calendar.getInstance();
@@ -82,6 +83,7 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper{
 
         db.insert(DB_TABLE_NAME, null, contentValues);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

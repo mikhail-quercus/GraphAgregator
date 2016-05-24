@@ -23,6 +23,7 @@
     <item>Service</item>
     <item>Settings</item>
     <item>Reference</item>
+    <item>SQLite</item>
   </string-array>
 
   <!-- Состояние выдвижной панели -->

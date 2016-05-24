@@ -30,3 +30,6 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.3'
     compile files('libs/mpandroidchartlibrary-2-2-4.jar')
 }
+dependencies {
+    compile 'com.android.support:support-v4:21.+'
+}

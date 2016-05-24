@@ -74,9 +74,10 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
 
         // Востановление фрагмента
         if (savedInstanceState != null) {
-            // Если не первое испольщование фрагмента, отобразим корректную информацию где сейчас пользователь
+            // Если не первое использование фрагмента, отобразим корректную информацию где сейчас пользователь
             currentPosition = savedInstanceState.getInt("position");
             setActionBarTitle(currentPosition);
+            //setActionBartTitile("!!!");
         } else {
             // При базовом создание MainActivity отобразить первый фрагмент
             selectItem(0);
@@ -90,7 +91,7 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
                 public void onDrawerClosed(View view) {
                     super.onDrawerClosed(view);
 
-
+                    // Приказ Android заново создать команды меню
                     invalidateOptionsMenu();
                 }
                 // Вызывается при переходе выдвижной панели в полностью открытое состояние.
@@ -98,7 +99,7 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
 
-                    // Приказ Android щаново создать команды меню
+
                     invalidateOptionsMenu();
                 }
             };
@@ -132,20 +133,33 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
                                                                        currentPosition = 3;
                                                                    }
 
-                                                                   // Вывести текст на панели действий и выделить правильный вариант в списке на выдвижной панели
-                                                                   setActionBarTitle(currentPosition);
+
+
+
+                                                                   // Если позиция больше 10 то это кнока графика - установим заголовок
+                                                                   if(currentPosition > 10){
+                                                                       setActionBartTitile("График");
+                                                                   }
+                                                                   else
+                                                                   {
+                                                                       // Вывести текст на панели действий и выделить правильный вариант в списке на выдвижной панели
+                                                                       setActionBarTitle(currentPosition);
+                                                                   }
+
+
                                                                    drawerList.setItemChecked(currentPosition, true);
                                                                }
                                                            }
                                                            );
     }
 
-    // Обработка щелчков в выжвижной панели
+    // Обработка щелчков в выжвижной панели + кнопки в TopActivity
     private void selectItem(int position) {
 
         // Обновить информацию заменой фрагмента
         currentPosition = position;
         Fragment fragment;
+
         switch(position) {
         case 1:
             fragment = new ServiceFragment();
@@ -156,11 +170,15 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
         case 3:
             fragment = new ReferenceFragment();
             break;
+        case 4:
+            fragment = new SQL_work();
+            break;
         case 10:
             Toast.makeText(this, "Создание нового графика", Toast.LENGTH_SHORT).show();
             fragment = new TopFragment();
             break;
         case 10+1:
+            // TODO: Текущая работа
             fragment = new PieChartFragment();
             break;
         case 10+2:
@@ -182,12 +200,18 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
 
+        /*
         // Назначение заголовка панели действий
         setActionBarTitle(position);
+        if( getActionBar().getTitle() == "null" )
+            setActionBartTitile("Обновленный");
+        */
+
         // Задвинуть боковую панель для удобства пользователя
         drawerLayout.closeDrawer(drawerList);
     }
 
+    // Вызывается при каждом вызове invalidateOptionsMenu()
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // Если выдвижная панель открыта - спрятать кнопки на панели действий
@@ -243,6 +267,12 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
         // Вывести заголовок на панели действий
         getActionBar().setTitle(title);
     }
+
+    // Вывод надписи текстом
+    public void setActionBartTitile(String str){
+        getActionBar().setTitle(str);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
