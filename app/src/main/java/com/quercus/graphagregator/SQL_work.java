@@ -135,6 +135,7 @@ public class SQL_work extends Fragment {
         });
 
 
+
         button_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

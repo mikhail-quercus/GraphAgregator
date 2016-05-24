@@ -1,14 +1,17 @@
 package com.quercus.graphagregator;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,8 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -53,11 +58,7 @@ public class PieChartFragment extends Fragment {
         String[] name_week = getActivity().getResources().getStringArray(R.array.name_week);
         String[] name_month = getActivity().getResources().getStringArray(R.array.name_month);
 
-        /*
-        answer = name_week[date.get(Calendar.DAY_OF_WEEK) - 1] + ", "
-                + date.get(Calendar.DAY_OF_MONTH) + name_month[date.get(Calendar.MONTH) - 1];
-                */
-
+        // TODO: Должны быть проблемы с пограничным состоянием листания даты и недели
         switch (position_calculation_system) {
             case 0:
                 // Работаем с листанением дня
@@ -66,11 +67,9 @@ public class PieChartFragment extends Fragment {
                 break;
             case 1:
                 // Работаем с листанием недели
-                // TODO: Пограничные состояния - начало в одном месяце, конец в другом.
-                Calendar date_start = date;
-                date_start.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-
-                answer = date_start.get(Calendar.DAY_OF_MONTH) + " - " + date.get(Calendar.DAY_OF_MONTH) + name_month[date.get(Calendar.MONTH)];
+                // TODO: Реализоовать переключение недели
+                date.add(Calendar.WEEK_OF_YEAR, day_week_mounth);
+                answer = date.get(Calendar.WEEK_OF_YEAR) + ", week";
                 break;
             case 2:
                 // Работаем с листанием месяца
@@ -103,8 +102,8 @@ public class PieChartFragment extends Fragment {
         View view = getView(); // Получение корневого объекта View фрагмента
 
         // Получим кнопки с макета
-        Button button_left = (Button)view.findViewById(R.id.arrow_left);
-        Button button_right = (Button)view.findViewById(R.id.arrow_right);
+        ImageButton button_left = (ImageButton)view.findViewById(R.id.arrow_left);
+        ImageButton button_right = (ImageButton)view.findViewById(R.id.arrow_right);
         final TextView arrow_text = (TextView)view.findViewById(R.id.arrow_text);
         arrow_text.setText( changeArrowTextAdd(0));
 
@@ -119,6 +118,7 @@ public class PieChartFragment extends Fragment {
                 String str_new_date = changeArrowTextAdd(-1);
 
                 arrow_text.setText( str_new_date );
+
             }
         });
 
@@ -149,9 +149,10 @@ public class PieChartFragment extends Fragment {
                 // Сохраним состояние для использование в дальнейшем
                 position_calculation_system = selectedItemPosition;
 
-                // Отрисуем заново отображение верхнего меню
-                //changeArrowTextAdd(0);
-                arrow_text.setText(String.valueOf(position_calculation_system));
+                // Изменение текста в верхнем меню
+                String arrow_new = changeArrowTextAdd(0);
+                arrow_text.setText(arrow_new);
+
             }
 
             @Override
@@ -162,31 +163,84 @@ public class PieChartFragment extends Fragment {
         });
 
 
+
+
+
+
+
+
         // Получили ссылка на макет графика
         PieChart pieChart = (PieChart)view.findViewById(R.id.pie_chart);
 
 
         // Массив необработанных графиков
         ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(4f, 0));
-        entries.add(new Entry(8f, 1));
-        entries.add(new Entry(6f, 2));
-        entries.add(new Entry(2f, 3));
-        entries.add(new Entry(18f, 4));
-        entries.add(new Entry(9f, 5));
+
+        // Лэйблы графика
+        ArrayList<String> labels = new ArrayList<String>();
+
+
+        GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Calendar date_1 = Calendar.getInstance();
+        date_1.set(Calendar.HOUR_OF_DAY, 0);
+
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[]{GraphDatabaseHelper.KEY_DATE, GraphDatabaseHelper.KEY_STEP},
+                String.valueOf(GraphDatabaseHelper.KEY_DATE) + " > ?",
+                new String[]{Long.toString(date_1.getTimeInMillis())},
+                null, null, null);
+
+
+
+        if (cursor.moveToFirst()) {
+            //int idIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_ID);
+            int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
+            int stepIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_STEP);
+            //int moneyIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_MONEY);
+            //int sleepIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_SLEEP);
+
+            do {
+                int i = 0;
+
+                // Получим значение и преобразуем их
+                //int id = cursor.getInt(idIndex);
+                long data_time_raw = cursor.getLong(dateIndex);
+                int step = cursor.getInt(stepIndex);
+
+                //int money = cursor.getInt(moneyIndex);
+                //int sleep = cursor.getInt(sleepIndex);
+
+                int money = 0;
+                int sleep = 0;
+                int id = 0;
+
+                // Просто для красивого вывода
+                DateFormat df;
+                df = new SimpleDateFormat("HH:mm");
+                String strDate = df.format(data_time_raw);
+
+                // Запищем в массив для отображение графика
+                entries.add(new Entry(step, i));
+                labels.add(strDate);
+
+
+                i++;
+            } while (cursor.moveToNext());
+        } else
+            Log.d("mLog","0 rows");
+
+        cursor.close();
+        db.close();
+
+
 
 
         // данные dataset
         PieDataSet dataset = new PieDataSet(entries, "# of Calls");
 
-        // Лэйблы графика
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("January");
-        labels.add("February");
-        labels.add("March");
-        labels.add("April");
-        labels.add("May");
-        labels.add("June");
+
 
         // Постройка графика
         PieData data = new PieData(labels, dataset);

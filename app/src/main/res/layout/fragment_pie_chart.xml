@@ -9,21 +9,21 @@
         android:id = "@+id/arrow_text"
         android:text="@string/arrow_text"
         android:ems="8"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:layout_row="0"
         android:layout_column="1"
         android:layout_columnSpan="4" />
 
-    <Button
+    <ImageButton
         android:id = "@+id/arrow_right"
-        android:drawableBottom="@drawable/ic_keyboard_arrow_right_black_36dp"
+        android:src="@drawable/ic_keyboard_arrow_right_black_36dp"
         android:layout_row="0"
         android:layout_column="5" />
 
 
-    <Button
+    <ImageButton
         android:id = "@+id/arrow_left"
-        android:drawableBottom="@drawable/ic_keyboard_arrow_left_black_36dp"
+        android:src="@drawable/ic_keyboard_arrow_left_black_36dp"
         android:layout_row="0"
         android:layout_column="0" />
 
@@ -33,6 +33,7 @@
         android:layout_column="7"
         android:layout_columnSpan="3"
         android:entries="@array/calculation_system_data"
+        android:spinnerMode="dialog"
         android:layout_width="wrap_content" />
 
 
