@@ -5,24 +5,27 @@
     android:layout_column="10"
     tools:context="com.quercus.graphagregator.PieChartFragment">
 
-    <Button
-        android:id = "@+id/arrow_left"
-        android:text="J"
-        android:layout_row="0"
-        android:layout_column="0" />
-
     <TextView
         android:id = "@+id/arrow_text"
-        android:text="arrow_text"
+        android:text="@string/arrow_text"
+        android:ems="8"
+        android:gravity="center_horizontal"
         android:layout_row="0"
         android:layout_column="1"
         android:layout_columnSpan="4" />
 
     <Button
         android:id = "@+id/arrow_right"
-        android:text="L"
+        android:drawableBottom="@drawable/ic_keyboard_arrow_right_black_36dp"
         android:layout_row="0"
         android:layout_column="5" />
+
+
+    <Button
+        android:id = "@+id/arrow_left"
+        android:drawableBottom="@drawable/ic_keyboard_arrow_left_black_36dp"
+        android:layout_row="0"
+        android:layout_column="0" />
 
     <Spinner
         android:id = "@+id/calculation_system_data"
