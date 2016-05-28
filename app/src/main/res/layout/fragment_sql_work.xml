@@ -26,4 +26,40 @@
         android:text="Очистить"
         android:id="@+id/sql_button_clear"
         android:layout_gravity="right|top" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Строк?"
+        android:id="@+id/sql_getCount"
+        android:layout_gravity="left|center_vertical" />
+
+    <Button
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:text="Последняя запись?"
+        android:id="@+id/sql_getLastDate"
+        android:layout_gravity="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Дополнить"
+        android:id="@+id/sql_update"
+        android:layout_gravity="right|bottom" />
+
+    <EditText
+        android:layout_width="263dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/sql_editNewColumn"
+        android:layout_gravity="left|bottom"
+        android:autoText="false"
+        android:text="Новый столбец" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Все ключи"
+        android:id="@+id/sql_getColums"
+        android:layout_gravity="right|center_vertical" />
 </FrameLayout>

@@ -1,32 +1,21 @@
 package com.quercus.graphagregator;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 // Библиотека для работы с графиками
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SQL_work extends Fragment {
@@ -52,13 +41,128 @@ public class SQL_work extends Fragment {
         Button button_read = (Button)view.findViewById(R.id.sql_button_read);
         Button button_clear = (Button)view.findViewById(R.id.sql_button_clear);
 
+        Button button_getCount = (Button)view.findViewById(R.id.sql_getCount);
+        Button button_addColumn = (Button)view.findViewById(R.id.sql_update);
+        Button button_getLastDate = (Button)view.findViewById(R.id.sql_getLastDate);
+        Button button_getColumns = (Button)view.findViewById(R.id.sql_getColums);
 
+        final EditText editText_newColumn = (EditText)view.findViewById(R.id.sql_editNewColumn);
+
+        // Заполнить таблицу
         button_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 dbHelper.writeData(db);
+                dbHelper.close();
+            }
+        });
+
+
+        // Добавить столбец
+        button_addColumn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                // Уже существующие столбцы
+                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
+                String[] ColumnNamesAll = cursor.getColumnNames();
+                int ColumnNamesAmt = cursor.getColumnCount();
+
+                // TODO: Кроме этого нужно проверить что это не число, это не пустая строка, что нет пробелов. Но это тестовая страница и она будет удалена в release
+                // Проверка что название нового столбца будет уникальное
+                String strNewColumn = String.valueOf(editText_newColumn.getText());
+                boolean isUniqueStr = true;
+                for(int i = 0 ; i < ColumnNamesAmt; i++){
+                    if(ColumnNamesAll[i].equals(strNewColumn))
+                        isUniqueStr = false;
+                }
+
+                // Добавим новый столбец если он уникальный
+                if(isUniqueStr){
+                    db.execSQL("ALTER TABLE " + GraphDatabaseHelper.DB_TABLE_NAME + " ADD COLUMN " + strNewColumn + " " + "NUMERIC");
+                }
+                else {
+                    Toast toast = Toast.makeText(getActivity(), "Не добавленно, т.к такой столбец существует", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+                cursor.close();
+                dbHelper.close();
+            }
+        });
+
+
+        // Получить все столбцы
+        button_getColumns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
+                String[] ColumnNamesAll = cursor.getColumnNames();
+                int ColumnNamesAmt = cursor.getColumnCount();
+
+                // сформируем выходную строку
+                String strAnswer = null;
+                for(int i = 0 ; i < ColumnNamesAmt ; i++){
+                    strAnswer += ColumnNamesAll[i];
+                    strAnswer += "\n";
+                }
+
+                Toast toast = Toast.makeText(getActivity(), strAnswer  , Toast.LENGTH_LONG);
+                toast.show();
+
+                cursor.close();
+                dbHelper.close();
+            }
+        });
+
+        // Получить последнюю запись
+        button_getLastDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                        new String[] {"MAX(" + GraphDatabaseHelper.KEY_DATE + ")"},
+                        null, null, null, null, null);
+
+                cursor.moveToFirst();
+
+                long dateLast = cursor.getLong(0);
+                DateFormat df;
+                df = new SimpleDateFormat("d MMM, y - HH:mm");
+                String strDate = df.format(dateLast);
+
+                Toast toast = Toast.makeText(getActivity(), "Последняя запись в: " + strDate, Toast.LENGTH_SHORT);
+                toast.show();
+
+                cursor.close();
+                dbHelper.close();
+            }
+        });
+
+
+
+        // Количество строк в таблицу
+        button_getCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
+
+                Toast toast = Toast.makeText(getActivity(), "Количество строк: " + String.valueOf(cursor.getCount()), Toast.LENGTH_SHORT);
+                toast.show();
+
+                cursor.close();
                 dbHelper.close();
             }
         });
@@ -71,17 +175,6 @@ public class SQL_work extends Fragment {
 
                 Calendar date_1 = Calendar.getInstance();
                 date_1.set(Calendar.HOUR_OF_DAY, 0);
-
-                /*
-                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
-                        new String[] {GraphDatabaseHelper.KEY_DATE, GraphDatabaseHelper.KEY_STEP},
-                        null,
-                        null,
-                        null,
-                        null,
-                        null);
-                */
-
 
                 Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
                         new String[]{GraphDatabaseHelper.KEY_DATE, GraphDatabaseHelper.KEY_STEP},

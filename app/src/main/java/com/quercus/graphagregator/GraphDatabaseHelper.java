@@ -5,10 +5,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-public class GraphDatabaseHelper  extends SQLiteOpenHelper{
+public class GraphDatabaseHelper  extends SQLiteOpenHelper {
 
     public static final int DB_VERSION = 2;
     public static final String DB_NAME = "GraphDb";
@@ -36,13 +37,13 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper{
     }
 
 
-    public void clearData(SQLiteDatabase db){
+    public void clearData(SQLiteDatabase db) {
         db.execSQL("drop table if exists " + DB_TABLE_NAME);
         onCreate(db);
     }
 
 
-    public void writeData(SQLiteDatabase db){
+    public void writeData(SQLiteDatabase db) {
         final Random random = new Random();
 
         Calendar start_year = Calendar.getInstance();
@@ -59,17 +60,16 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper{
         // Заполним нашу таблицу данными за последний год
         // TODO: Очень долгий процесс распараллелить его
         // TODO: Хранить сон в bool или придумать что-то другое
-        for(Calendar i = start_year ; i.getTimeInMillis() < now.getTimeInMillis() ; i.add(Calendar.HOUR, 1) ){
+        for (Calendar i = start_year; i.getTimeInMillis() < now.getTimeInMillis(); i.add(Calendar.HOUR, 1)) {
 
             int sleep = 0;
-            if(i.get(Calendar.HOUR) > 0 && i.get(Calendar.HOUR) < 9 ){
+            if (i.get(Calendar.HOUR) > 0 && i.get(Calendar.HOUR) < 9) {
                 sleep = 1;
             }
-            insertData(db, i , Math.abs(random.nextInt(10000)), random.nextInt(500000), sleep);
+            insertData(db, i, Math.abs(random.nextInt(10000)), random.nextInt(500000), sleep);
         }
 
     }
-
 
     private void insertData(SQLiteDatabase db, Calendar data_time, int step, int money, int sleep){
 
