@@ -54,7 +54,8 @@
         android:id="@+id/sql_editNewColumn"
         android:layout_gravity="left|bottom"
         android:autoText="false"
-        android:text="Новый столбец" />
+        android:inputType="textPersonName"
+        android:hint="Новый столбец" />
 
     <Button
         android:layout_width="wrap_content"

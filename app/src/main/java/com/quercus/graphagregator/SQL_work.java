@@ -67,30 +67,13 @@ public class SQL_work extends Fragment {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                // Уже существующие столбцы
-                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
-                String[] ColumnNamesAll = cursor.getColumnNames();
-                int ColumnNamesAmt = cursor.getColumnCount();
-
-                // TODO: Кроме этого нужно проверить что это не число, это не пустая строка, что нет пробелов. Но это тестовая страница и она будет удалена в release
-                // Проверка что название нового столбца будет уникальное
                 String strNewColumn = String.valueOf(editText_newColumn.getText());
-                boolean isUniqueStr = true;
-                for(int i = 0 ; i < ColumnNamesAmt; i++){
-                    if(ColumnNamesAll[i].equals(strNewColumn))
-                        isUniqueStr = false;
-                }
 
-                // Добавим новый столбец если он уникальный
-                if(isUniqueStr){
-                    db.execSQL("ALTER TABLE " + GraphDatabaseHelper.DB_TABLE_NAME + " ADD COLUMN " + strNewColumn + " " + "NUMERIC");
-                }
-                else {
-                    Toast toast = Toast.makeText(getActivity(), "Не добавленно, т.к такой столбец существует", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+                boolean result = dbHelper.addNewColumnHowInteger(db, strNewColumn);
 
-                cursor.close();
+                Toast toast = Toast.makeText(getActivity(), String.valueOf(result) , Toast.LENGTH_SHORT);
+                toast.show();
+
                 dbHelper.close();
             }
         });
@@ -103,13 +86,11 @@ public class SQL_work extends Fragment {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
-                String[] ColumnNamesAll = cursor.getColumnNames();
-                int ColumnNamesAmt = cursor.getColumnCount();
+                String[] ColumnNamesAll = dbHelper.getNameColumns(db);
 
                 // сформируем выходную строку
                 String strAnswer = null;
-                for(int i = 0 ; i < ColumnNamesAmt ; i++){
+                for(int i = 0 ; i < ColumnNamesAll.length ; i++){
                     strAnswer += ColumnNamesAll[i];
                     strAnswer += "\n";
                 }
@@ -117,7 +98,6 @@ public class SQL_work extends Fragment {
                 Toast toast = Toast.makeText(getActivity(), strAnswer  , Toast.LENGTH_LONG);
                 toast.show();
 
-                cursor.close();
                 dbHelper.close();
             }
         });
@@ -129,21 +109,16 @@ public class SQL_work extends Fragment {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
-                        new String[] {"MAX(" + GraphDatabaseHelper.KEY_DATE + ")"},
-                        null, null, null, null, null);
 
-                cursor.moveToFirst();
+                Calendar dateLast = dbHelper.getLastDate(db);
 
-                long dateLast = cursor.getLong(0);
                 DateFormat df;
                 df = new SimpleDateFormat("d MMM, y - HH:mm");
-                String strDate = df.format(dateLast);
+                String strDate = df.format(dateLast.getTimeInMillis());
 
                 Toast toast = Toast.makeText(getActivity(), "Последняя запись в: " + strDate, Toast.LENGTH_SHORT);
                 toast.show();
 
-                cursor.close();
                 dbHelper.close();
             }
         });
@@ -157,15 +132,14 @@ public class SQL_work extends Fragment {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
-
-                Toast toast = Toast.makeText(getActivity(), "Количество строк: " + String.valueOf(cursor.getCount()), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getActivity(), "Количество строк: " + String.valueOf(dbHelper.getCountRows(db)), Toast.LENGTH_SHORT);
                 toast.show();
 
-                cursor.close();
                 dbHelper.close();
             }
         });
+
+
 
         button_read.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,7 +208,9 @@ public class SQL_work extends Fragment {
             public void onClick(View v) {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
+
                 dbHelper.clearData(db);
+
                 dbHelper.close();
             }
         });
