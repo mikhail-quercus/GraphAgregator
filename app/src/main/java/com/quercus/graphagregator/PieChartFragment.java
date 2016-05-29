@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -136,9 +137,75 @@ public class PieChartFragment extends Fragment {
                 answer = name_month[date.get(Calendar.MONTH)] + " " + date.get(Calendar.YEAR);
                 break;
         }
-        redrawChart();
 
+        updateChart();
         return answer;
+    }
+
+    private void updateChart(){
+        updateArrayEntryAndLabels();
+
+        View view = getView(); // Получение корневого объекта View фрагмента
+
+        // Макет графика
+        final PieChart pieChart = (PieChart)view.findViewById(R.id.pie_chart);
+
+        // данные dataset
+        PieDataSet dataset_new = new PieDataSet(entries, "Легенда графика");
+
+        // Постройка графика
+        PieData data_new = new PieData(labels, dataset_new);
+        pieChart.setData(data_new);
+
+        // Цвета
+        dataset_new.setColors(ColorTemplate.PASTEL_COLORS); //
+        //pieChart.setDescription("Описание2");
+
+        String[] name_week = getActivity().getResources().getStringArray(R.array.name_week);
+
+        // Вывести в центре круга - день сегодня + название графика
+        String strInCenter = name_week[date.get(Calendar.DAY_OF_WEEK)-1] + "\n" + "\n" + "График количества шагов за день";
+        pieChart.setCenterText(strInCenter);
+        pieChart.setDrawSliceText(true);
+    }
+
+
+    // Обновление данных в классе
+    private void updateArrayEntryAndLabels(){
+        GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Начальная дата
+        long dateNow = date.getTimeInMillis();
+        Calendar date_1  = Calendar.getInstance();
+        date_1.setTimeInMillis(dateNow);
+
+        date_1.set(Calendar.HOUR_OF_DAY, 0);
+        date_1.clear(Calendar.MINUTE);
+        date_1.clear(Calendar.SECOND);
+        date_1.clear(Calendar.MILLISECOND);
+
+        // Очистка от старых данных
+        labels.clear();
+        entries.clear();
+
+
+        ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
+
+        for(int i = 0 ; i < labels_row.size() ; i++){
+            String str = labels_row.get(i).get(Calendar.HOUR_OF_DAY) + ":00";
+            labels.add(str);
+        }
+
+        // Массив необработанных графиков
+
+        ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, GraphDatabaseHelper.KEY_STEP, date_1, date);
+
+        for(int i = 0 ; i < dataRow.size() ; i++){
+            entries.add(new Entry(dataRow.get(i), i));
+        }
+
+        dbHelper.close();
     }
 
 
@@ -147,14 +214,27 @@ public class PieChartFragment extends Fragment {
         super.onStart();
         View view = getView(); // Получение корневого объекта View фрагмента
 
+        // Макет графика
+        final PieChart pieChart = (PieChart)view.findViewById(R.id.pie_chart);
+
         // Получим кнопки с макета
         ImageButton button_left = (ImageButton)view.findViewById(R.id.arrow_left);
         ImageButton button_right = (ImageButton)view.findViewById(R.id.arrow_right);
+
         final TextView arrow_text = (TextView)view.findViewById(R.id.arrow_text);
         arrow_text.setText( changeArrowTextAdd(0));
 
         // Выпадающий список - выбор масштаба анализа  день/неделя/месяц
         final Spinner spiner_calculation_data = (Spinner)view.findViewById(R.id.calculation_system_data);
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // =================================================================
+        // Обработка самого графика
+
+
+
+        // =====================================================================================
+
 
 
         // Обработка нажатия влево
@@ -164,7 +244,6 @@ public class PieChartFragment extends Fragment {
                 String str_new_date = changeArrowTextAdd(-1);
 
                 arrow_text.setText(str_new_date);
-
             }
         });
 
@@ -178,6 +257,7 @@ public class PieChartFragment extends Fragment {
                 arrow_text.setText(str_new_date);
             }
         });
+
 
 
         // Обработка выпадающего списка
@@ -201,77 +281,7 @@ public class PieChartFragment extends Fragment {
 
         });
 
-
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // Обработка самого графика
-
-        // Получили ссылка на макет графика
     }
 
-    // Изменение данных для графика
-    private void redrawChart() {
-        GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        // Начальная дата
-        /*
-        long dateNow = date.getTimeInMillis();
-        Calendar date_1  = Calendar.getInstance();
-        date_1.setTimeInMillis(dateNow);
-
-        date_1.set(Calendar.HOUR_OF_DAY, 0);
-        date_1.clear(Calendar.MINUTE);
-        date_1.clear(Calendar.SECOND);
-        date_1.clear(Calendar.MILLISECOND);
-        */
-
-        long dateNow = date.getTimeInMillis();
-        Calendar date_1  = Calendar.getInstance();
-        date_1.setTimeInMillis(dateNow);
-        date_1.add(Calendar.DAY_OF_YEAR, -1);
-
-
-        // Очистка от прошлых итераций
-        labels.clear();
-        entries.clear();
-
-
-        ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
-
-        for(int i = 0 ; i < labels_row.size() ; i++){
-            String str = labels_row.get(i).get(Calendar.HOUR_OF_DAY) + ":" + labels_row.get(i).get(Calendar.MINUTE);
-            labels.add(str);
-        }
-
-        // Массив необработанных графиков
-
-        ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, GraphDatabaseHelper.KEY_STEP, date_1, date);
-
-        for(int i = 0 ; i < dataRow.size() ; i++){
-            entries.add(new Entry(dataRow.get(i), i));
-        }
-
-
-
-        View view = getView(); // Получение корневого объекта View фрагмента
-        PieChart pieChart = (PieChart)view.findViewById(R.id.pie_chart);
-
-        // данные dataset
-        PieDataSet dataset = new PieDataSet(entries, "# of Calls");
-
-        // Постройка графика
-        PieData data = new PieData(labels, dataset);
-        pieChart.setData(data);
-
-        // Цвета
-        dataset.setColors(ColorTemplate.PASTEL_COLORS); //
-        pieChart.setDescription("Описание");
-    }
-
-
-    void RedawChart(){
-
-    }
 
 }
