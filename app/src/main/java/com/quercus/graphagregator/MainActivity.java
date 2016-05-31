@@ -182,8 +182,7 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
             fragment = new PieChartFragment();
             break;
         case 10+2:
-            Toast.makeText(this, "Не реализовано", Toast.LENGTH_SHORT).show();
-            fragment = new TopFragment();
+            fragment = new LineChartFragment();
             break;
         case 10+3:
             Toast.makeText(this, "Не реализовано", Toast.LENGTH_SHORT).show();
