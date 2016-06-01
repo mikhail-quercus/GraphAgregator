@@ -2,7 +2,7 @@
     <string name="app_name">GraphAgregator</string>
 
     <!-- TopFragment -->
-    <string name="top_day_text">Some data for any service, in this day.</string>
+    <string name="top_day_text">01 апреля 2016\n количество шагов: 3500\n сон : 7</string>
 
 
     <!-- TODO: Временный текст, удалить -->

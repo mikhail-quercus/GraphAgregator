@@ -215,10 +215,21 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         for (Calendar i = start_year; i.getTimeInMillis() < now.getTimeInMillis(); i.add(Calendar.HOUR, 1)) {
 
             int sleep = 0;
-            if (i.get(Calendar.HOUR) > 0 && i.get(Calendar.HOUR) < 9) {
+            int step = 0;
+            int money = 0;
+
+            if (i.get(Calendar.HOUR_OF_DAY) > 0 && i.get(Calendar.HOUR_OF_DAY) < (random.nextInt(4) + 7) ) {
                 sleep = 1;
             }
-            insertData(db, i, Math.abs(random.nextInt(10000)), random.nextInt(500000), sleep);
+            else{
+                step = Math.abs(random.nextInt(800)+200);
+
+                if(random.nextInt(8) == 0 )
+                    money = random.nextInt(100000);
+                else
+                    money = 0;
+            }
+            insertData(db, i, step, money, sleep);
         }
 
     }

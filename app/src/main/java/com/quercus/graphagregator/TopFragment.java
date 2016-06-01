@@ -22,12 +22,10 @@ public class TopFragment extends Fragment implements View.OnClickListener {
 
         Button button_graph1 = (Button)rootView.findViewById(R.id.graph1);
         Button button_graph2 = (Button)rootView.findViewById(R.id.graph2);
-        Button button_graph3 = (Button)rootView.findViewById(R.id.graph3);
         Button button_graph_new = (Button)rootView.findViewById(R.id.graph_new);
 
         button_graph1.setOnClickListener(this);
         button_graph2.setOnClickListener(this);
-        button_graph3.setOnClickListener(this);
         button_graph_new.setOnClickListener(this);
 
 
@@ -44,9 +42,6 @@ public class TopFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.graph2:
                 index = 2;
-                break;
-            case R.id.graph3:
-                index = 3;
                 break;
             case R.id.graph_new:
                 index = 0;

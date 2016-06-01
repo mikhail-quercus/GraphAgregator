@@ -17,7 +17,6 @@
                         android:id="@+id/top_day_text"
                         android:text="@string/top_day_text"
                         android:gravity="top"
-                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_weight="2"
                         android:layout_height="200dp" />
@@ -26,8 +25,8 @@
 
                     <Button
                         android:id = "@+id/graph1"
-                        android:text="Тут скриншот графика 1"
-                        android:drawableBottom="@drawable/graph_standart"
+                        android:text="График 1"
+                        android:drawableBottom="@drawable/pie_temp"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -36,23 +35,14 @@
 
                     <Button
                         android:id = "@+id/graph2"
-                        android:text="Тут скриншот графика 2"
-                        android:drawableBottom="@drawable/graph_standart"
+                        android:text="График 2"
+                        android:drawableBottom="@drawable/line_temp"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_height="0dp" />
 
-                    <Button
-                        android:id = "@+id/graph3"
-                        android:text="Тут скриншот графика 3"
-                        android:drawableBottom="@drawable/graph_standart"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_height="0dp" />
 
                     <!-- TODO: Придумать способ как добавлять новый график -->
                     <Button
