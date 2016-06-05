@@ -102,10 +102,6 @@ public class PieChartFragment extends Fragment {
         // данные dataset
         PieDataSet dataset_new = new PieDataSet(entries, "Легенда графика");
 
-        // Постройка графика
-        PieData data_new = new PieData(labels, dataset_new);
-        pieChart.setData(data_new);
-
         // Цвета
         dataset_new.setColors(ColorTemplate.PASTEL_COLORS); //
         //pieChart.setDescription("Описание2");
@@ -113,6 +109,14 @@ public class PieChartFragment extends Fragment {
         // Вывести в центре круга - день сегодня + название графика
         pieChart.setCenterText(name_graph);
         pieChart.setDrawSliceText(true);
+
+        // Постройка графика
+        PieData data_new = new PieData(labels, dataset_new);
+        pieChart.setData(data_new);
+
+        // Необъодимо что бы отрисовка была сразу-же измененна, иначе необходим клик на область
+        pieChart.notifyDataSetChanged();
+        pieChart.invalidate();
     }
 
 
