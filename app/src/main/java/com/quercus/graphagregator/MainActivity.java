@@ -160,6 +160,9 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
         currentPosition = position;
         Fragment fragment;
 
+        // Для передачи аргументов - фрагменту
+        Bundle bundle_for_graph = new Bundle();
+
         switch(position) {
         case 1:
             fragment = new ServiceFragment();
@@ -180,6 +183,15 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
         case 10+1:
             // TODO: Текущая работа
             fragment = new PieChartFragment();
+
+            // Передаем ключ с которым мы работаем
+            String KEY_XXX = GraphDatabaseHelper.KEY_STEP;
+            String name_graph  = "Тестовый пример";
+
+            bundle_for_graph.putString("key_xxx", KEY_XXX);
+            bundle_for_graph.putString("name_graph", name_graph);
+            fragment.setArguments(bundle_for_graph);
+
             break;
         case 10+2:
             fragment = new LineChartFragment();

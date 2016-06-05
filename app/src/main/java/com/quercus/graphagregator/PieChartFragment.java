@@ -26,6 +26,8 @@ public class PieChartFragment extends Fragment {
 
     Calendar date = Calendar.getInstance(); // Установим время сейчас
     int position_calculation_system = 0; // день / неделя / месяц
+    String KEY_XXX = "";
+    String name_graph = "";
 
     // Данные для графика <int, i>
     ArrayList<Entry> entries = new ArrayList<>();
@@ -40,7 +42,14 @@ public class PieChartFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Можно выполнить работу не связанную с интерфейсами
         super.onCreate(savedInstanceState);
+
+        Bundle bundle_get = getArguments();
+        if(bundle_get != null) {
+            KEY_XXX = bundle_get.getString("key_xxx");
+            name_graph = bundle_get.getString("name_graph");
+        }
     }
 
 
@@ -101,6 +110,7 @@ public class PieChartFragment extends Fragment {
 
                 long dateInMillins  = date.getTimeInMillis();
 
+                // TODO: Проблема в приграничных состояниях
                 Calendar dateStartWeek = date;
                 dateStartWeek.setTimeInMillis(dateInMillins);
                 while (dateStartWeek.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY){
@@ -164,8 +174,7 @@ public class PieChartFragment extends Fragment {
         String[] name_week = getActivity().getResources().getStringArray(R.array.name_week);
 
         // Вывести в центре круга - день сегодня + название графика
-        String strInCenter = name_week[date.get(Calendar.DAY_OF_WEEK)-1] + "\n" + "\n" + "График количества шагов за день";
-        pieChart.setCenterText(strInCenter);
+        pieChart.setCenterText(name_graph);
         pieChart.setDrawSliceText(true);
     }
 
@@ -199,7 +208,7 @@ public class PieChartFragment extends Fragment {
 
         // Массив необработанных графиков
 
-        ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, GraphDatabaseHelper.KEY_STEP, date_1, date);
+        ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, KEY_XXX, date_1, date);
 
         for(int i = 0 ; i < dataRow.size() ; i++){
             entries.add(new Entry(dataRow.get(i), i));

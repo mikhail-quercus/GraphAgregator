@@ -199,7 +199,7 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         final Random random = new Random();
 
         Calendar start_year = Calendar.getInstance();
-        //start_year.set(YEAR, 2016);
+        start_year.set(Calendar.YEAR, 2016);
         start_year.set(Calendar.MONTH, 0);
         start_year.set(Calendar.DAY_OF_MONTH, 0);
         start_year.set(Calendar.HOUR, 0);
@@ -218,8 +218,9 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
             int step = 0;
             int money = 0;
 
-            if (i.get(Calendar.HOUR_OF_DAY) > 0 && i.get(Calendar.HOUR_OF_DAY) < (random.nextInt(4) + 7) ) {
+            if (i.get(Calendar.HOUR_OF_DAY) > 0 && i.get(Calendar.HOUR_OF_DAY) < (random.nextInt(4) + 3) ) {
                 sleep = 1;
+                step = Math.abs(random.nextInt(800)+200);
             }
             else{
                 step = Math.abs(random.nextInt(800)+200);
