@@ -59,92 +59,31 @@ public class PieChartFragment extends Fragment {
         // Сформируем ответ
         String answer = null;
 
-        // Название недели и месяца - будут браться для нужного языка
-        String[] name_week = getActivity().getResources().getStringArray(R.array.name_week);
-        String[] name_month = getActivity().getResources().getStringArray(R.array.name_month);
-
         switch (position_calculation_system) {
             case 0:
-                // Работаем с листанением дня
-                int dateMaxDayInYear = date.getActualMaximum(Calendar.DAY_OF_YEAR);
-
-                if (date.get(Calendar.DAY_OF_YEAR) == dateMaxDayInYear && day_week_mounth == 1) {
-                    date.add(Calendar.YEAR, 1);
-                    date.set(Calendar.DAY_OF_YEAR, 1);
-                }
-                else if(date.get(Calendar.DAY_OF_YEAR) == 1 && day_week_mounth == -1){
-                    date.add(Calendar.YEAR, -1);
-
-                    // Текущий год уже сменился - новое количество дней в году может быть новым
-                    date.set(Calendar.DAY_OF_YEAR, date.getActualMaximum(Calendar.DAY_OF_YEAR));
-                }
-                else {
-                    date.add(Calendar.DAY_OF_YEAR, day_week_mounth);
-                }
-
-                // Настройка форматирования текста
-                // EX: Saturday, 3 September 2016
-                answer = name_week[date.get(Calendar.DAY_OF_WEEK)-1] + ", " + date.get(Calendar.DAY_OF_MONTH) + " " + name_month[date.get(Calendar.MONTH)] + " " + date.get(Calendar.YEAR);
+                // Листание дней
+                if(day_week_mounth == 1)
+                    date = CalendarComplement.incrementDay(date);
+                else
+                    date = CalendarComplement.decrementDay(date);
+                answer = CalendarComplement.toStringDay(date);
 
                 break;
             case 1:
                 // Работаем с листанием недели
-                int dateMaxWeekInYear = date.getActualMaximum(Calendar.WEEK_OF_YEAR);
-
-                if (date.get(Calendar.WEEK_OF_YEAR) == dateMaxWeekInYear && day_week_mounth == 1) {
-                    date.add(Calendar.YEAR, 1);
-                    date.set(Calendar.WEEK_OF_YEAR, 1);
-                }
-                else if(date.get(Calendar.WEEK_OF_YEAR) == 1 && day_week_mounth == -1){
-                    date.add(Calendar.YEAR, -1);
-
-                    // Текущая год уже сменилась - количество недель в году может быть новым
-                    date.set(Calendar.WEEK_OF_YEAR, date.getActualMaximum(Calendar.WEEK_OF_YEAR));
-                }
-                else {
-                    date.add(Calendar.WEEK_OF_YEAR, day_week_mounth);
-                }
-
-                // EX: 1 неделя 2016
-                // EX: 2 мая - 9 мая 2016
-
-                long dateInMillins  = date.getTimeInMillis();
-
-                // TODO: Проблема в приграничных состояниях
-                Calendar dateStartWeek = date;
-                dateStartWeek.setTimeInMillis(dateInMillins);
-                while (dateStartWeek.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY){
-                    dateStartWeek.add(Calendar.DAY_OF_YEAR, -1);
-                }
-
-                Calendar dateEndWeek = Calendar.getInstance();
-                dateEndWeek.setTimeInMillis(dateInMillins);
-                while (dateEndWeek.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY){
-                    dateEndWeek.add(Calendar.DAY_OF_YEAR, 1);
-                }
-
-                //answer = date.get(Calendar.WEEK_OF_YEAR) + ", week" + date.get(Calendar.YEAR);
-                answer = dateStartWeek.get(Calendar.DAY_OF_MONTH) + " " + name_month[dateStartWeek.get(Calendar.MONTH)] + " - " +
-                        dateEndWeek.get(Calendar.DAY_OF_MONTH) + " " + name_month[dateEndWeek.get(Calendar.MONTH)] + " " + dateEndWeek.get(Calendar.YEAR);
-
+                if(day_week_mounth == 1)
+                    date = CalendarComplement.incrementWeek(date);
+                else
+                    date = CalendarComplement.decrementWeek(date);
+                answer = CalendarComplement.toStringWeek(date);
                 break;
             case 2:
                 // Работаем с листанием месяца
-                // Нужно отлавливать состояние для граничных месяцев для перелистывание года
-                if (date.get(Calendar.MONTH) == Calendar.DECEMBER && day_week_mounth == 1) {
-                    date.add(Calendar.YEAR, 1);
-                    date.set(Calendar.MONTH, Calendar.JANUARY);
-                }
-                else if(date.get(Calendar.MONTH) == Calendar.JANUARY && day_week_mounth == -1){
-                    date.add(Calendar.YEAR, -1);
-                    date.set(Calendar.MONTH, Calendar.DECEMBER);
-                }
-                else{
-                    date.add(Calendar.MONTH, day_week_mounth);
-                }
-
-                // EX: May 2016
-                answer = name_month[date.get(Calendar.MONTH)] + " " + date.get(Calendar.YEAR);
+                if(day_week_mounth == 1)
+                    date = CalendarComplement.incrementMonth(date);
+                else
+                    date = CalendarComplement.decrementMonth(date);
+                answer = CalendarComplement.toStringMonth(date);
                 break;
         }
 
@@ -170,8 +109,6 @@ public class PieChartFragment extends Fragment {
         // Цвета
         dataset_new.setColors(ColorTemplate.PASTEL_COLORS); //
         //pieChart.setDescription("Описание2");
-
-        String[] name_week = getActivity().getResources().getStringArray(R.array.name_week);
 
         // Вывести в центре круга - день сегодня + название графика
         pieChart.setCenterText(name_graph);
@@ -202,7 +139,7 @@ public class PieChartFragment extends Fragment {
         ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
 
         for(int i = 0 ; i < labels_row.size() ; i++){
-            String str = labels_row.get(i).get(Calendar.HOUR_OF_DAY) + ":00";
+            String str = CalendarComplement.toStringHour(labels_row.get(i));
             labels.add(str);
         }
 
