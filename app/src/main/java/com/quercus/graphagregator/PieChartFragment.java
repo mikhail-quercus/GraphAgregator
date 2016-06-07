@@ -160,6 +160,24 @@ public class PieChartFragment extends Fragment {
 
                 // Начальная дата
                 Calendar dateStartWeek = CalendarComplement.getStartWeekDay(date);
+                Calendar dateFinishWeek = CalendarComplement.getFinishWeekDay(date);
+
+                // Массив необработанных графиков
+                ArrayList<Calendar> labels_row1 = dbHelper.getArrayCalendarDay(db, dateStartWeek, dateFinishWeek);
+
+                for(int i = 0 ; i < labels_row1.size() ; i++){
+                    String str = CalendarComplement.toStringDayShort(labels_row1.get(i));
+                    //String str = String.valueOf(labels_row1.get(i));
+                    //String str =
+                    labels.add(str);
+                }
+
+                ArrayList<Integer> dataRow1 = dbHelper.getArrayIntDay(db, KEY_XXX, dateStartWeek, dateFinishWeek);
+
+                for(int i = 0 ; i < dataRow1.size() ; i++){
+                    entries.add(new Entry(dataRow1.get(i), i));
+                }
+
 
                 // Массив необработанных графиков
 

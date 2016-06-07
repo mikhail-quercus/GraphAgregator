@@ -151,6 +151,38 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         return  answer;
     }
 
+
+    public ArrayList getArrayCalendarDay(SQLiteDatabase db, Calendar startDate, Calendar finishDate){
+        ArrayList<Calendar> answer = new ArrayList<Calendar>();
+
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[]{GraphDatabaseHelper.KEY_DATE},
+                String.valueOf(GraphDatabaseHelper.KEY_DATE) + " >= ? " + "AND " +  GraphDatabaseHelper.KEY_DATE + " < ?",
+                new String[]{Long.toString(startDate.getTimeInMillis()), Long.toString(finishDate.getTimeInMillis())},
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
+            do {
+                long dateRow_raw = cursor.getLong(dateIndex);
+
+                Calendar dateTemp = Calendar.getInstance();
+                dateTemp.setTimeInMillis(dateRow_raw);
+
+                if(dateTemp.get(Calendar.HOUR_OF_DAY) == 0) {
+                    answer.add(dateTemp);
+                }
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+        return  answer;
+    }
+
+
+
     // TODO: Вынести проверку на ключ в отдельную функцию
 
     // Получить данные в виде массива с одной даты на другую
@@ -185,6 +217,59 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
 
         }
+
+        cursor.close();
+        return  answer;
+    }
+
+    // Получить данные в виде массива с одной даты на другую
+    public ArrayList getArrayIntDay(SQLiteDatabase db, String KEY_XXX, Calendar startDate, Calendar finishDate){
+        ArrayList<Integer> answer = new ArrayList<Integer>();
+
+        // Проверка что ключ подходящий
+        String[] columnsArray = getNameColumns(db);
+        Arrays.sort(columnsArray);
+        int indexArray = Arrays.binarySearch(columnsArray, KEY_XXX);
+
+        // Значит такого ключа нет - вернем пустой массив
+        if(indexArray < 0) {
+            return answer;
+        }
+
+
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[]{GraphDatabaseHelper.KEY_DATE, KEY_XXX},
+                String.valueOf(GraphDatabaseHelper.KEY_DATE) + " >= ? " + "AND " +  GraphDatabaseHelper.KEY_DATE + " < ?",
+                new String[]{Long.toString(startDate.getTimeInMillis()), Long.toString(finishDate.getTimeInMillis())},
+                null, null, null);
+
+
+
+        int sum_of_day = 0;
+        if (cursor.moveToFirst()) {
+            int xxxIndex = cursor.getColumnIndex(KEY_XXX);
+            int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
+            do {
+                int xxx = cursor.getInt(xxxIndex);
+
+                long dateRow_raw = cursor.getLong(dateIndex);
+                Calendar dateTemp = Calendar.getInstance();
+                dateTemp.setTimeInMillis(dateRow_raw);
+
+                // В последний час дня - запишем сумму результатов
+                if(dateTemp.get(Calendar.HOUR_OF_DAY) == 23) {
+                    answer.add(sum_of_day);
+                    sum_of_day = 0;
+                }
+                else
+                    sum_of_day += xxx;
+
+            } while (cursor.moveToNext());
+        }
+
+        // Если не нулевой результат - значит день еще не закончился - запишем что есть
+        if(sum_of_day != 0)
+            answer.add(sum_of_day);
 
         cursor.close();
         return  answer;

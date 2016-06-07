@@ -111,7 +111,7 @@ public class CalendarComplement {
         dateFinishDay.setTimeInMillis(dateInMillins);
 
         dateFinishDay.set(Calendar.HOUR_OF_DAY, 23);
-        dateFinishDay.set(Calendar.MINUTE,59);
+        dateFinishDay.set(Calendar.MINUTE, 59);
         dateFinishDay.set(Calendar.SECOND, 59);
         dateFinishDay.set(Calendar.MILLISECOND, 99);
 
@@ -129,6 +129,9 @@ public class CalendarComplement {
             dateStartWeek = decrementDay(dateStartWeek);
         }
 
+        // Установим часы, минуты и т.д. в начало дня
+        dateStartWeek = getStartDay(dateStartWeek);
+
         return dateStartWeek;
     }
     public static Calendar getFinishWeekDay(Calendar date){
@@ -142,14 +145,55 @@ public class CalendarComplement {
             dateFinishWeek = incrementDay(dateFinishWeek);
         }
 
+        // Теперь установим часы, минуты и т.д. к окончанию дня
+        dateFinishWeek = getFinishDay(dateFinishWeek);
+
         return dateFinishWeek;
     }
+
+    public static Calendar getStartMonthDay(Calendar date){
+
+        long dateInMillins  = date.getTimeInMillis();
+
+        Calendar dateStartMonth = Calendar.getInstance();
+        dateStartMonth.setTimeInMillis(dateInMillins);
+
+        dateStartMonth.set(Calendar.DAY_OF_MONTH, 0);
+        dateStartMonth = getStartDay(dateStartMonth);
+
+        // Установим часы, минуты и т.д. в начало дня
+        dateStartMonth = getStartDay(dateStartMonth);
+
+        return dateStartMonth;
+    }
+
+    public static Calendar getFinishMonthDay(Calendar date){
+
+        long dateInMillins  = date.getTimeInMillis();
+        int dateMaxDayInYear = date.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        Calendar dateFinishMonth = Calendar.getInstance();
+        dateFinishMonth.setTimeInMillis(dateInMillins);
+
+        dateFinishMonth.set(Calendar.DAY_OF_MONTH, dateMaxDayInYear);
+        dateFinishMonth = getStartDay(dateFinishMonth);
+
+        // Установим часы, минуты и т.д. в начало дня
+        dateFinishMonth = getFinishDay(dateFinishMonth);
+
+        return dateFinishMonth;
+    }
+
 
     public static String toStringHour(Calendar date){
         String ansver = String.valueOf(date.get(Calendar.HOUR_OF_DAY))
                 + ":"
                 + "00";
         return ansver;
+    }
+    public static String toStringDayShort(Calendar date){
+        String answer = name_week[date.get(Calendar.DAY_OF_WEEK)-1];
+        return answer;
     }
     public static String toStringDay(Calendar date){
         String answer = name_week[date.get(Calendar.DAY_OF_WEEK)-1]
