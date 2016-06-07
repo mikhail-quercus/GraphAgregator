@@ -151,6 +151,7 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         return  answer;
     }
 
+    // TODO: Вынести проверку на ключ в отдельную функцию
 
     // Получить данные в виде массива с одной даты на другую
     public ArrayList getArrayIntHour(SQLiteDatabase db, String KEY_XXX, Calendar startDate, Calendar finishDate){
@@ -174,6 +175,8 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
                 null, null, null);
 
 
+
+
         if (cursor.moveToFirst()) {
             int xxxIndex = cursor.getColumnIndex(KEY_XXX);
             do {
@@ -186,6 +189,8 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         cursor.close();
         return  answer;
     }
+
+
 
     public String[] getNameColumns(SQLiteDatabase db){
         Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);

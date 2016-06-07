@@ -89,6 +89,20 @@ public class CalendarComplement {
         return date;
     }
 
+    public static Calendar getStartDay(Calendar date){
+
+        long dateInMillins  = date.getTimeInMillis();
+
+        Calendar dateStartDay = Calendar.getInstance();
+        dateStartDay.setTimeInMillis(dateInMillins);
+
+        dateStartDay.set(Calendar.HOUR_OF_DAY, 0);
+        dateStartDay.clear(Calendar.MINUTE);
+        dateStartDay.clear(Calendar.SECOND);
+        dateStartDay.clear(Calendar.MILLISECOND);
+
+        return dateStartDay;
+    }
     public static Calendar getStartWeekDay(Calendar date){
 
         long dateInMillins  = date.getTimeInMillis();
@@ -117,7 +131,7 @@ public class CalendarComplement {
     }
 
     public static String toStringHour(Calendar date){
-        String ansver = String.valueOf(date.get(Calendar.HOUR))
+        String ansver = String.valueOf(date.get(Calendar.HOUR_OF_DAY))
                 + ":"
                 + "00";
         return ansver;

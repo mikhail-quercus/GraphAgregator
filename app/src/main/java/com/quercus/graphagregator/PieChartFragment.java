@@ -125,15 +125,7 @@ public class PieChartFragment extends Fragment {
         GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        // Начальная дата
-        long dateNow = date.getTimeInMillis();
-        Calendar date_1  = Calendar.getInstance();
-        date_1.setTimeInMillis(dateNow);
 
-        date_1.set(Calendar.HOUR_OF_DAY, 0);
-        date_1.clear(Calendar.MINUTE);
-        date_1.clear(Calendar.SECOND);
-        date_1.clear(Calendar.MILLISECOND);
 
         // Очистка от старых данных
         labels.clear();
@@ -142,6 +134,16 @@ public class PieChartFragment extends Fragment {
         switch (position_calculation_system) {
             case 0:
                 // Листание дней
+
+                // Начальная дата
+                long dateNow = date.getTimeInMillis();
+                Calendar date_1  = Calendar.getInstance();
+                date_1.setTimeInMillis(dateNow);
+
+                date_1.set(Calendar.HOUR_OF_DAY, 0);
+                date_1.clear(Calendar.MINUTE);
+                date_1.clear(Calendar.SECOND);
+                date_1.clear(Calendar.MILLISECOND);
 
                 ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
 
@@ -158,12 +160,18 @@ public class PieChartFragment extends Fragment {
                     entries.add(new Entry(dataRow.get(i), i));
                 }
 
-
                 break;
             case 1:
                 // Работаем с листанием недели
 
+                // Начальная дата
+                Calendar dateStartWeek = CalendarComplement.getStartWeekDay(date);
+
+                // Массив необработанных графиков
+
+
                 break;
+
             case 2:
                 // Работаем с листанием месяца
 

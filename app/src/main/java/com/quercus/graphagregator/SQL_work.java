@@ -147,8 +147,11 @@ public class SQL_work extends Fragment {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+                // TODO: Временный вывод результатов за несколько дней
                 Calendar date_1 = Calendar.getInstance();
                 date_1.set(Calendar.HOUR_OF_DAY, 0);
+                date_1.add(Calendar.DAY_OF_YEAR, -1);
+                date_1.add(Calendar.DAY_OF_YEAR, -1);
 
                 Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
                         new String[]{GraphDatabaseHelper.KEY_DATE, GraphDatabaseHelper.KEY_STEP},
