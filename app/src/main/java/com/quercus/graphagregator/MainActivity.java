@@ -176,6 +176,12 @@ public class MainActivity extends Activity implements TopFragment.OnSelectedButt
         case 4:
             fragment = new SQL_work();
             break;
+        case 5:
+            fragment = new ImportCSV();
+            break;
+        case 6:
+            fragment = new ExportCSV();
+            break;
         case 10:
             Toast.makeText(this, "Создание нового графика", Toast.LENGTH_SHORT).show();
             fragment = new TopFragment();

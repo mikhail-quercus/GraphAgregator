@@ -139,21 +139,38 @@ public class PieChartFragment extends Fragment {
         labels.clear();
         entries.clear();
 
+        switch (position_calculation_system) {
+            case 0:
+                // Листание дней
 
-        ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
+                ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
 
-        for(int i = 0 ; i < labels_row.size() ; i++){
-            String str = CalendarComplement.toStringHour(labels_row.get(i));
-            labels.add(str);
+                for(int i = 0 ; i < labels_row.size() ; i++){
+                    String str = CalendarComplement.toStringHour(labels_row.get(i));
+                    labels.add(str);
+                }
+
+                // Массив необработанных графиков
+
+                ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, KEY_XXX, date_1, date);
+
+                for(int i = 0 ; i < dataRow.size() ; i++){
+                    entries.add(new Entry(dataRow.get(i), i));
+                }
+
+
+                break;
+            case 1:
+                // Работаем с листанием недели
+
+                break;
+            case 2:
+                // Работаем с листанием месяца
+
+                break;
         }
 
-        // Массив необработанных графиков
 
-        ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, KEY_XXX, date_1, date);
-
-        for(int i = 0 ; i < dataRow.size() ; i++){
-            entries.add(new Entry(dataRow.get(i), i));
-        }
 
         dbHelper.close();
     }

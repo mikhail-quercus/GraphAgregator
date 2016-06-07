@@ -24,6 +24,8 @@
         <item>Settings</item>
         <item>Reference</item>
         <item>SQLite</item>
+        <item>Import CSV-file</item>
+        <item>Export CSV-file</item>
     </string-array>
 
     <!-- Состояние выдвижной панели -->
