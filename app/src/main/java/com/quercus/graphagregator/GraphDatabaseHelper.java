@@ -74,56 +74,37 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         return answer;
     }
 
-
     // Добавить новый Column
-    public boolean addNewColumnHowInteger(SQLiteDatabase db, String strNewColum ){
+    public boolean addNewColumnHowInteger(SQLiteDatabase db, String KEY_XXX_ROW ){
 
-        // Исправим возможные ошибки в таблице
-        strNewColum = strNewColum.replace(" ", "");
 
-        // TODO: Вылетает при передаче символов
-        // Очистим название Column от первый цифр
-        while (strNewColum.isEmpty() == false) {
-            char firstChar = strNewColum.charAt(0);
-            if (Character.isLetterOrDigit(firstChar) == true)
-                // Стерем первую цифру
-                strNewColum = strNewColum.substring(1);
-            else
-                break;
+        String KEY_XXX = "";
+
+        // Исправим возможные ошибки в название строки
+        for (int i = 0; i < KEY_XXX_ROW.length(); i++) {
+            if (Character.isLetterOrDigit(KEY_XXX_ROW.charAt(i))) {
+                KEY_XXX += KEY_XXX_ROW.charAt(i);
+            }
+
         }
 
-
-        if(strNewColum.isEmpty() == true) {
+        // Если исправленный от всего лишнего столбец пустой - выходим
+        if(KEY_XXX == "")
             return false;
-        }
 
-        // Уже существующие столбцы
-        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
-        String[] ColumnNamesAll = cursor.getColumnNames();
-        int ColumnNamesAmt = cursor.getColumnCount();
-
-        // Проверка что название нового столбца будет уникальное
-        boolean isUniqueStr = true;
-        for(int i = 0 ; i < ColumnNamesAmt; i++){
-            if(ColumnNamesAll[i].equals(strNewColum))
-                isUniqueStr = false;
-        }
+        // Уникальный столбец?
+        boolean isUniqueStr = (isThisNameColumnExist(db, KEY_XXX) == false);
 
         // Добавим новый столбец если он уникальный
         if(isUniqueStr){
-            db.execSQL("ALTER TABLE " + GraphDatabaseHelper.DB_TABLE_NAME + " ADD COLUMN " + strNewColum + " " + "NUMERIC");
+            db.execSQL("ALTER TABLE " + GraphDatabaseHelper.DB_TABLE_NAME + " ADD COLUMN " + KEY_XXX + " " + "NUMERIC");
         }
-        cursor.close();
+
 
         return  isUniqueStr;
     }
 
 
-    // TODO: Удалить таблицу полностью - метод
-    // TODO: Переименовать Column в таблице - метод
-
-
-    // TODO: Дату нужно обрабатывать отдельно
     public ArrayList getArrayCalendarHour(SQLiteDatabase db, Calendar startDate, Calendar finishDate){
         ArrayList<Calendar> answer = new ArrayList<Calendar>();
 
@@ -150,8 +131,6 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         cursor.close();
         return  answer;
     }
-
-
     public ArrayList getArrayCalendarDay(SQLiteDatabase db, Calendar startDate, Calendar finishDate){
         ArrayList<Calendar> answer = new ArrayList<Calendar>();
 
@@ -180,25 +159,41 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         cursor.close();
         return  answer;
     }
+    public ArrayList getArrayCalendarMonth(SQLiteDatabase db, Calendar startDate, Calendar finishDate){
+        ArrayList<Calendar> answer = new ArrayList<Calendar>();
 
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[]{GraphDatabaseHelper.KEY_DATE},
+                String.valueOf(GraphDatabaseHelper.KEY_DATE) + " >= ? " + "AND " +  GraphDatabaseHelper.KEY_DATE + " < ?",
+                new String[]{Long.toString(startDate.getTimeInMillis()), Long.toString(finishDate.getTimeInMillis())},
+                null, null, null);
 
+        if (cursor.moveToFirst()) {
+            int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
+            do {
+                long dateRow_raw = cursor.getLong(dateIndex);
 
-    // TODO: Вынести проверку на ключ в отдельную функцию
+                Calendar dateTemp = Calendar.getInstance();
+                dateTemp.setTimeInMillis(dateRow_raw);
 
-    // Получить данные в виде массива с одной даты на другую
+                if(dateTemp.get(Calendar.HOUR_OF_DAY) == 0 && dateTemp.get(Calendar.DAY_OF_MONTH) == dateTemp.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                    answer.add(dateTemp);
+                }
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+        return  answer;
+    }
+
     public ArrayList getArrayIntHour(SQLiteDatabase db, String KEY_XXX, Calendar startDate, Calendar finishDate){
         ArrayList<Integer> answer = new ArrayList<Integer>();
 
         // Проверка что ключ подходящий
-        String[] columnsArray = getNameColumns(db);
-        Arrays.sort(columnsArray);
-        int indexArray = Arrays.binarySearch(columnsArray, KEY_XXX);
-
-        // Значит такого ключа нет - вернем пустой массив
-        if(indexArray < 0) {
+        if(isThisNameColumnExist(db, KEY_XXX) == false)
             return answer;
-        }
-
 
         Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
                 new String[]{GraphDatabaseHelper.KEY_DATE, KEY_XXX},
@@ -221,21 +216,12 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         cursor.close();
         return  answer;
     }
-
-    // Получить данные в виде массива с одной даты на другую
     public ArrayList getArrayIntDay(SQLiteDatabase db, String KEY_XXX, Calendar startDate, Calendar finishDate){
         ArrayList<Integer> answer = new ArrayList<Integer>();
 
         // Проверка что ключ подходящий
-        String[] columnsArray = getNameColumns(db);
-        Arrays.sort(columnsArray);
-        int indexArray = Arrays.binarySearch(columnsArray, KEY_XXX);
-
-        // Значит такого ключа нет - вернем пустой массив
-        if(indexArray < 0) {
+        if(isThisNameColumnExist(db, KEY_XXX) == false)
             return answer;
-        }
-
 
         Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
                 new String[]{GraphDatabaseHelper.KEY_DATE, KEY_XXX},
@@ -274,8 +260,49 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         cursor.close();
         return  answer;
     }
+    public ArrayList getArrayIntMonth(SQLiteDatabase db, String KEY_XXX, Calendar startDate, Calendar finishDate){
+        ArrayList<Integer> answer = new ArrayList<Integer>();
+
+        if(isThisNameColumnExist(db, KEY_XXX) == false)
+            return answer;
+
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[]{GraphDatabaseHelper.KEY_DATE, KEY_XXX},
+                String.valueOf(GraphDatabaseHelper.KEY_DATE) + " >= ? " + "AND " +  GraphDatabaseHelper.KEY_DATE + " < ?",
+                new String[]{Long.toString(startDate.getTimeInMillis()), Long.toString(finishDate.getTimeInMillis())},
+                null, null, null);
 
 
+
+        int sum_of_month = 0;
+        if (cursor.moveToFirst()) {
+            int xxxIndex = cursor.getColumnIndex(KEY_XXX);
+            int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
+            do {
+                int xxx = cursor.getInt(xxxIndex);
+
+                long dateRow_raw = cursor.getLong(dateIndex);
+                Calendar dateTemp = Calendar.getInstance();
+                dateTemp.setTimeInMillis(dateRow_raw);
+
+                // В последний час дня в последнем дне месяца- запишем сумму результатов
+                if(dateTemp.get(Calendar.HOUR_OF_DAY) == 23 && dateTemp.get(Calendar.DAY_OF_MONTH) == dateTemp.getActualMaximum(Calendar.DAY_OF_MONTH) ) {
+                    answer.add(sum_of_month);
+                    sum_of_month = 0;
+                }
+                else
+                    sum_of_month += xxx;
+
+            } while (cursor.moveToNext());
+        }
+
+        // Если не нулевой результат - значит день еще не закончился - запишем что есть
+        if(sum_of_month != 0)
+            answer.add(sum_of_month);
+
+        cursor.close();
+        return  answer;
+    }
 
     public String[] getNameColumns(SQLiteDatabase db){
         Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME, null, null, null, null, null, null);
@@ -285,6 +312,20 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         return  ColumnNamesAll;
     }
 
+    public boolean isThisNameColumnExist(SQLiteDatabase db, String KEY_XXX){
+        String[] columnsArray = getNameColumns(db);
+        Arrays.sort(columnsArray);
+        int indexArray = Arrays.binarySearch(columnsArray, KEY_XXX);
+
+        // Проверка что такой ключ есть
+        if(indexArray < 0) {
+            return false;
+        }
+        else
+            return true;
+    }
+
+    // Записать тестовые данные
     public void writeData(SQLiteDatabase db) {
         final Random random = new Random();
 

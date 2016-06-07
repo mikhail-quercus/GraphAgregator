@@ -166,16 +166,15 @@ public class CalendarComplement {
 
         return dateStartMonth;
     }
-
     public static Calendar getFinishMonthDay(Calendar date){
 
         long dateInMillins  = date.getTimeInMillis();
-        int dateMaxDayInYear = date.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int dateMaxDayInThisMonth = date.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         Calendar dateFinishMonth = Calendar.getInstance();
         dateFinishMonth.setTimeInMillis(dateInMillins);
 
-        dateFinishMonth.set(Calendar.DAY_OF_MONTH, dateMaxDayInYear);
+        dateFinishMonth.set(Calendar.DAY_OF_MONTH, dateMaxDayInThisMonth);
         dateFinishMonth = getStartDay(dateFinishMonth);
 
         // Установим часы, минуты и т.д. в начало дня
@@ -191,8 +190,12 @@ public class CalendarComplement {
                 + "00";
         return ansver;
     }
-    public static String toStringDayShort(Calendar date){
+    public static String toStringDayNameInWeek(Calendar date){
         String answer = name_week[date.get(Calendar.DAY_OF_WEEK)-1];
+        return answer;
+    }
+    public static String toStringNumberDayInMonth(Calendar date){
+        String answer = String.valueOf(date.get(Calendar.DAY_OF_MONTH));
         return answer;
     }
     public static String toStringDay(Calendar date){

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -166,9 +165,7 @@ public class PieChartFragment extends Fragment {
                 ArrayList<Calendar> labels_row1 = dbHelper.getArrayCalendarDay(db, dateStartWeek, dateFinishWeek);
 
                 for(int i = 0 ; i < labels_row1.size() ; i++){
-                    String str = CalendarComplement.toStringDayShort(labels_row1.get(i));
-                    //String str = String.valueOf(labels_row1.get(i));
-                    //String str =
+                    String str = CalendarComplement.toStringDayNameInWeek(labels_row1.get(i));
                     labels.add(str);
                 }
 
@@ -178,14 +175,26 @@ public class PieChartFragment extends Fragment {
                     entries.add(new Entry(dataRow1.get(i), i));
                 }
 
-
-                // Массив необработанных графиков
-
-
                 break;
 
             case 2:
                 // Работаем с листанием месяца
+                Calendar dateStartMonth = CalendarComplement.getStartMonthDay(date);
+                Calendar dateFinishMonth = CalendarComplement.getFinishMonthDay(date);
+
+                // Массив необработанных графиков
+                ArrayList<Calendar> labels_row2 = dbHelper.getArrayCalendarDay(db, dateStartMonth, dateFinishMonth);
+
+                for(int i = 0 ; i < labels_row2.size() ; i++){
+                    String str = CalendarComplement.toStringNumberDayInMonth(labels_row2.get(i));
+                    labels.add(str);
+                }
+
+                ArrayList<Integer> dataRow2 = dbHelper.getArrayIntDay(db, KEY_XXX, dateStartMonth, dateFinishMonth);
+
+                for(int i = 0 ; i < dataRow2.size() ; i++){
+                    entries.add(new Entry(dataRow2.get(i), i));
+                }
 
                 break;
         }
