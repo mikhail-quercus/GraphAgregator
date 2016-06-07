@@ -103,6 +103,21 @@ public class CalendarComplement {
 
         return dateStartDay;
     }
+    public static Calendar getFinishDay(Calendar date){
+
+        long dateInMillins  = date.getTimeInMillis();
+
+        Calendar dateFinishDay = Calendar.getInstance();
+        dateFinishDay.setTimeInMillis(dateInMillins);
+
+        dateFinishDay.set(Calendar.HOUR_OF_DAY, 23);
+        dateFinishDay.set(Calendar.MINUTE,59);
+        dateFinishDay.set(Calendar.SECOND, 59);
+        dateFinishDay.set(Calendar.MILLISECOND, 99);
+
+        return dateFinishDay;
+    }
+
     public static Calendar getStartWeekDay(Calendar date){
 
         long dateInMillins  = date.getTimeInMillis();

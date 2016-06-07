@@ -136,16 +136,10 @@ public class PieChartFragment extends Fragment {
                 // Листание дней
 
                 // Начальная дата
-                long dateNow = date.getTimeInMillis();
-                Calendar date_1  = Calendar.getInstance();
-                date_1.setTimeInMillis(dateNow);
+                Calendar date_1 = CalendarComplement.getStartDay(date);
+                Calendar date_2 = CalendarComplement.getFinishDay(date);
 
-                date_1.set(Calendar.HOUR_OF_DAY, 0);
-                date_1.clear(Calendar.MINUTE);
-                date_1.clear(Calendar.SECOND);
-                date_1.clear(Calendar.MILLISECOND);
-
-                ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date);
+                ArrayList<Calendar> labels_row = dbHelper.getArrayCalendarHour(db, date_1, date_2);
 
                 for(int i = 0 ; i < labels_row.size() ; i++){
                     String str = CalendarComplement.toStringHour(labels_row.get(i));
@@ -154,7 +148,7 @@ public class PieChartFragment extends Fragment {
 
                 // Массив необработанных графиков
 
-                ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, KEY_XXX, date_1, date);
+                ArrayList<Integer> dataRow = dbHelper.getArrayIntHour(db, KEY_XXX, date_1, date_2);
 
                 for(int i = 0 ; i < dataRow.size() ; i++){
                     entries.add(new Entry(dataRow.get(i), i));
