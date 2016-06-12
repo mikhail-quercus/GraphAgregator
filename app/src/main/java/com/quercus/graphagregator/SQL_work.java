@@ -71,7 +71,7 @@ public class SQL_work extends Fragment {
 
                 boolean result = dbHelper.addNewColumnHowInteger(db, strNewColumn);
 
-                Toast toast = Toast.makeText(getActivity(), String.valueOf(result) , Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getActivity(), String.valueOf(result), Toast.LENGTH_SHORT);
                 toast.show();
 
                 dbHelper.close();
@@ -147,55 +147,51 @@ public class SQL_work extends Fragment {
                 GraphDatabaseHelper dbHelper = new GraphDatabaseHelper(getActivity());
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                // TODO: Временный вывод результатов за несколько дней
-                Calendar date_1 = Calendar.getInstance();
-                date_1.set(Calendar.HOUR_OF_DAY, 0);
-                date_1.add(Calendar.DAY_OF_YEAR, -1);
-                date_1.add(Calendar.DAY_OF_YEAR, -1);
-
+                // Все результаты за все время, по всем ключам
                 Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
-                        new String[]{GraphDatabaseHelper.KEY_DATE, GraphDatabaseHelper.KEY_STEP},
-                        String.valueOf(GraphDatabaseHelper.KEY_DATE) + " > ?",
-                        new String[]{Long.toString(date_1.getTimeInMillis())},
+                        null,
+                        null,
+                        null,
                         null, null, null);
 
 
+                String[] allKey = dbHelper.getNameColumns(db);
 
                 if (cursor.moveToFirst()) {
-                    //int idIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_ID);
-                    int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
-                    int stepIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_STEP);
-                    //int moneyIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_MONEY);
-                    //int sleepIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_SLEEP);
-
                     do {
+                        // Формируем вывод
+                        String out_log = "";
 
-                        // Получим значение и преобразуем их
-                        //int id = cursor.getInt(idIndex);
+                        // Получили дату соответствующую записи
+                        int dateIndex = cursor.getColumnIndex(GraphDatabaseHelper.KEY_DATE);
                         long data_time_raw = cursor.getLong(dateIndex);
-                        int step = cursor.getInt(stepIndex);
-
-                        //int money = cursor.getInt(moneyIndex);
-                        //int sleep = cursor.getInt(sleepIndex);
-
-                        int money = 0;
-                        int sleep = 0;
-                        int id = 0;
 
                         // Просто для красивого вывода
                         DateFormat df;
                         df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                         String strDate = df.format(data_time_raw);
+                        out_log += strDate;
+                        out_log += " => ";
 
 
+                        // Все остальные ключи
+                        // TODO: Стоило бы исключить дату из вывода. А можно и забить
+                        for(int i = 0 ; i < allKey.length ; i++) {
+
+
+                            int xxxIndex = cursor.getColumnIndex(allKey[i]);
+                            int xxx = cursor.getInt(xxxIndex);
+
+
+                            out_log += allKey[i] + "=" + xxx + " ; ";
+
+                        }
 
                         // Выведем их на консоль
-                        Log.d("mLog", "ID = " + id +
-                                ", date = " + strDate +
-                                ", money = " + money +
-                                ", sleep = " + sleep +
-                                ", step = " + step);
+                        Log.d("mLog", out_log);
                     } while (cursor.moveToNext());
+
+
                 } else
                     Log.d("mLog","0 rows");
 

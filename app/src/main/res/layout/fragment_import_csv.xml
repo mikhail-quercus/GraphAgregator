@@ -1,9 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.quercus.graphagregator.ImportCSV">
+
 
     <!-- TODO: Update blank fragment layout -->
 
-</FrameLayout>
+
+    <TextView
+        android:id="@+id/test_name_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/import_csv_add_file"
+        android:text="@string/import_scv_add_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top" />
+
+</LinearLayout>

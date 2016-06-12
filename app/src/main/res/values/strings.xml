@@ -36,6 +36,15 @@
     <!-- Меню переключение даты -->
     <string name="arrow_text">Today</string>
 
+
+    <!-- Кнопки в ImportCSV и ExportCSV-->
+    <string name="import_scv_add_file">Open file</string>
+
+
+    <!-- Ошибки -->
+    <string name="error_not_find_file_manager">ERROR: Not found file manager. Please install so</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="update_only_wifi">Только по wi-fi</string>

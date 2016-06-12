@@ -1,5 +1,6 @@
 package com.quercus.graphagregator;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -151,6 +152,7 @@ public class CalendarComplement {
         return dateFinishWeek;
     }
 
+
     public static Calendar getStartMonthDay(Calendar date){
 
         long dateInMillins  = date.getTimeInMillis();
@@ -226,6 +228,57 @@ public class CalendarComplement {
                 + " "
                 + date.get(Calendar.YEAR);
         return answer;
+    }
+
+    // TODO: Придумать название получше
+    public static String toStringYYYYMMDDHHMM(Calendar date){
+        String answer = date.get(Calendar.YEAR) + "." +
+                date.get(Calendar.MONTH) + "." +
+                date.get(Calendar.DAY_OF_MONTH) + " " +
+                date.get(Calendar.HOUR_OF_DAY) + ":" +
+                date.get(Calendar.MINUTE);
+        return answer;
+    }
+
+
+    // TODO: Не протестировано
+    public static Calendar convertStringToCalendar(String YYYY, String MM, String DD, String hh, String mm, String ss){
+        Calendar answer = Calendar.getInstance();
+        answer.clear();
+
+        // TODO: Исключение обработка
+        // TODO: Почему много вопросительных знаков в пустых местах
+        answer.set(Calendar.YEAR, Integer.parseInt(YYYY));
+        answer.set(Calendar.MONTH, Integer.parseInt(MM));
+        answer.set(Calendar.DAY_OF_MONTH, Integer.parseInt(DD));
+
+        answer.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hh));
+        answer.set(Calendar.MINUTE, Integer.parseInt(mm));
+        answer.set(Calendar.SECOND, Integer.parseInt(ss));
+
+        return answer;
+    }
+
+    // TODO: Не протестировано
+    public static int convertStringTimeToMinutes(String hh, String mm){
+        int answerMinutes = 0;
+
+        try {
+            answerMinutes = Integer.parseInt(hh)*60 + Integer.parseInt(mm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return answerMinutes;
+    }
+
+
+    // TODO: Название сменить
+    public static Calendar clearTrash(Calendar date){
+        date.clear(Calendar.MINUTE);
+        date.clear(Calendar.SECOND);
+        date.clear(Calendar.MILLISECOND);
+        return date;
     }
 
 }

@@ -74,6 +74,24 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         return answer;
     }
 
+    // Получить время последней записи
+    public Calendar getFirstDate(SQLiteDatabase db){
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[] {"MIN(" + GraphDatabaseHelper.KEY_DATE + ")"},
+                null, null, null, null, null);
+
+        cursor.moveToFirst();
+        long dateLast = cursor.getLong(0);
+        Calendar answer;
+        answer = Calendar.getInstance();
+        answer.setTimeInMillis(dateLast);
+
+        cursor.close();
+
+        return answer;
+    }
+
+
     // Добавить новый Column
     public boolean addNewColumnHowInteger(SQLiteDatabase db, String KEY_XXX_ROW ){
 
@@ -87,6 +105,9 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
             }
 
         }
+
+
+
 
         // Если исправленный от всего лишнего столбец пустой - выходим
         if(KEY_XXX == "")
@@ -379,6 +400,32 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         db.insert(DB_TABLE_NAME, null, contentValues);
     }
 
+    public int insertData(SQLiteDatabase db, Calendar data_time, String KEY_XXX ,int xxx){
+
+        // TODO: Ошибка тут. Почему?
+        /*
+        if( isThisNameColumnExist(db, KEY_XXX) == false )
+            return -1;
+        */
+
+        // Это запись пытается добавиться раньше чем была создана эта таблица
+        Calendar firstDateInTable = getFirstDate(db);
+        if(data_time.getTimeInMillis() < firstDateInTable.getTimeInMillis() )
+            return -2;
+
+        ContentValues contentValues = new ContentValues();
+
+        // TODO: Тут нужно получить нужную запись в таблице и переписать, а не вставлять новую
+
+
+        // Перевод в UNIX-time для записи в БД времени
+        contentValues.put(KEY_DATE, data_time.getTimeInMillis());
+        contentValues.put(KEY_XXX, xxx);
+
+        db.insert(DB_TABLE_NAME, null, contentValues);
+
+        return 0;
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
