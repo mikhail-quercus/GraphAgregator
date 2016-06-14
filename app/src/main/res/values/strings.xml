@@ -40,10 +40,16 @@
     <!-- Кнопки в ImportCSV и ExportCSV-->
     <string name="import_scv_add_file">Open file</string>
 
+    <string name="import_radio_button_num">Write number of coincidences</string>
+    <string name="import_radio_button_max">Write the maximum values</string>
+    <string name="import_radio_button_sum">Write the sum of values</string>
+
 
     <!-- Ошибки -->
-    <string name="error_not_find_file_manager">ERROR: Not found file manager. Please install so</string>
-
+    <string name="error_not_find_file_manager">ERROR: Not found file manager. Please install so.</string>
+    <string name="error_problem_reading_csv_file">ERROR: Not found file. Please check the availability of the device memory.</string>
+    <string name="error_parsing_csv_file">ERROR: Incorrect file structure.</string>
+    <string name="error_not_correct_name_column">ERROR: Incorrect column name. Check that the name does not contain special characters.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

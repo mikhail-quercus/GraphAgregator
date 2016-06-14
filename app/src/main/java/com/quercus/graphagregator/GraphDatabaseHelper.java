@@ -106,12 +106,15 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
 
         }
 
-
-
-
         // Если исправленный от всего лишнего столбец пустой - выходим
         if(KEY_XXX == "")
             return false;
+
+        // Если название начинается с цифры - выходим
+        if (Character.isDigit(KEY_XXX.charAt(0)) == true)
+            return false;
+
+
 
         // Уникальный столбец?
         boolean isUniqueStr = (isThisNameColumnExist(db, KEY_XXX) == false);
@@ -123,6 +126,38 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
 
 
         return  isUniqueStr;
+    }
+
+
+    public int getIntToDate(SQLiteDatabase db, String KEY_XXX, Calendar date){
+        int answer = 0;
+
+        // Проверка что ключ подходящий
+        if(isThisNameColumnExist(db, KEY_XXX) == false)
+            return answer;
+
+        Cursor cursor = db.query(GraphDatabaseHelper.DB_TABLE_NAME,
+                new String[]{GraphDatabaseHelper.KEY_DATE, KEY_XXX},
+                String.valueOf(GraphDatabaseHelper.KEY_DATE) + " == ? ",
+                new String[]{Long.toString(date.getTimeInMillis())},
+                null, null, null);
+
+
+
+
+        if (cursor.moveToFirst()) {
+            int xxxIndex = cursor.getColumnIndex(KEY_XXX);
+            do {
+                int xxx = cursor.getInt(xxxIndex);
+                answer = xxx;
+                cursor.close();
+                return answer;
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+        return  answer;
     }
 
 
@@ -400,32 +435,53 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         db.insert(DB_TABLE_NAME, null, contentValues);
     }
 
-    public int insertData(SQLiteDatabase db, Calendar data_time, String KEY_XXX ,int xxx){
+    public boolean updateDataAndClear(SQLiteDatabase db, Calendar data_time, String KEY_XXX ,int xxx){
 
-        // TODO: Ошибка тут. Почему?
-        /*
-        if( isThisNameColumnExist(db, KEY_XXX) == false )
-            return -1;
-        */
 
         // Это запись пытается добавиться раньше чем была создана эта таблица
         Calendar firstDateInTable = getFirstDate(db);
         if(data_time.getTimeInMillis() < firstDateInTable.getTimeInMillis() )
-            return -2;
+            return false;
 
         ContentValues contentValues = new ContentValues();
-
-        // TODO: Тут нужно получить нужную запись в таблице и переписать, а не вставлять новую
 
 
         // Перевод в UNIX-time для записи в БД времени
         contentValues.put(KEY_DATE, data_time.getTimeInMillis());
         contentValues.put(KEY_XXX, xxx);
 
-        db.insert(DB_TABLE_NAME, null, contentValues);
+        //db.insert(DB_TABLE_NAME, null, contentValues);
+        int numberUpdateRecords  = db.update(DB_TABLE_NAME, contentValues, KEY_DATE + " = ?", new String[]{String.valueOf(data_time.getTimeInMillis())} );
 
-        return 0;
+        return true;
     }
+
+
+    public boolean updateDataAndSum(SQLiteDatabase db, Calendar data_time, String KEY_XXX ,int xxx){
+
+
+        // Это запись пытается добавиться раньше чем была создана эта таблица
+        Calendar firstDateInTable = getFirstDate(db);
+        if(data_time.getTimeInMillis() < firstDateInTable.getTimeInMillis() )
+            return false;
+
+        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues_old = new ContentValues();
+
+        int xxx_old = getIntToDate(db, KEY_XXX, data_time);
+
+        // Перевод в UNIX-time для записи в БД времени
+        contentValues.put(KEY_DATE, data_time.getTimeInMillis());
+        contentValues.put(KEY_XXX, xxx + xxx_old);
+
+
+
+        //db.insert(DB_TABLE_NAME, null, contentValues);
+        int numberUpdateRecords  = db.update(DB_TABLE_NAME, contentValues, KEY_DATE + " = ?", new String[]{String.valueOf(data_time.getTimeInMillis())} );
+
+        return true;
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -1,13 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.quercus.graphagregator.MainActivity">
+
+<LinearLayout
     android:orientation="vertical"
-    tools:context="com.quercus.graphagregator.ImportCSV">
-
-
-    <!-- TODO: Update blank fragment layout -->
-
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/test_name_file"
@@ -21,4 +25,151 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top" />
 
+
+    <TextView
+        android:id="@+id/import_file_read_example"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp" />
+
+    <!-- Просто отступ-->
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:text="Value setting"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id = "@+id/import_select_values"
+        android:spinnerMode="dialog"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <RadioGroup
+        android:id="@+id/import_select_method_write_row"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id = "@+id/radio_button_1_num"
+            android:text = "@string/import_radio_button_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id = "@+id/radio_button_2_sum"
+            android:text = "@string/import_radio_button_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id = "@+id/radio_button_3_max"
+            android:text = "@string/import_radio_button_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+
+    <!-- Просто отступ-->
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:text="Date setting"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="italic"
+        android:text="Select years"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id = "@+id/import_select_YYYY"
+        android:spinnerMode="dialog"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="italic"
+        android:text="Select months"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id = "@+id/import_select_MM"
+        android:spinnerMode="dialog"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="italic"
+        android:text="Select days"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id = "@+id/import_select_DD"
+        android:spinnerMode="dialog"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="italic"
+        android:text="Select hours:minutes:seconds"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id = "@+id/import_select_hh_mm_ss"
+        android:spinnerMode="dialog"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <!-- Просто отступ-->
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:text="Add new column"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/import_new_column"
+        android:inputType="textPersonName"
+        android:hint="New column" />
+
+    <!-- Просто отступ-->
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:id="@+id/import_button_update_database"
+        android:layout_width="wrap_content"
+        android:text="Update database"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_height="match_parent" />
+
+
 </LinearLayout>
+
+</ScrollView>
