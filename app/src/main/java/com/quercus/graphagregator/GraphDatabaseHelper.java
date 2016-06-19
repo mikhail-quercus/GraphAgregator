@@ -23,10 +23,10 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
     public static final String DB_TABLE_NAME = "Data";
 
     public static final String KEY_ID = "_id";
-    public static final String KEY_DATE = "milliseconds";
+    public static final String KEY_DATE = "date";
     public static final String KEY_STEP = "steps";
     public static final String KEY_MONEY = "moneys";
-    public static final String KEY_SLEEP = "hours of sleep";
+    public static final String KEY_SLEEP = "hours_sleep";
 
     public GraphDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
