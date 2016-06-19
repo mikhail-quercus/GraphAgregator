@@ -235,8 +235,14 @@ public class CalendarComplement {
         String answer = date.get(Calendar.YEAR) + "." +
                 date.get(Calendar.MONTH) + "." +
                 date.get(Calendar.DAY_OF_MONTH) + " " +
-                date.get(Calendar.HOUR_OF_DAY) + ":" +
-                date.get(Calendar.MINUTE);
+                date.get(Calendar.HOUR_OF_DAY) + ":";
+
+        int mm = date.get(Calendar.MINUTE);
+        if(mm < 10)
+            answer += "0" + mm;
+        else
+            answer += mm;
+
         return answer;
     }
 

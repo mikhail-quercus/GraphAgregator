@@ -1,13 +1,139 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.quercus.graphagregator.ExportCSV">
+    tools:context="com.quercus.graphagregator.MainActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:text="File name"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/export_file_name"
+            android:inputType="textPersonName"
+            android:hint="File name" />
+
+        <!-- Просто отступ-->
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:text="File directory"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id = "@+id/export_path_to_dir"
+            android:spinnerMode="dialog"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+
+        <!-- Просто отступ-->
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:text="Select columns"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id = "@+id/export_select_columns"
+            android:spinnerMode="dialog"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <Button
+            android:id = "@+id/export_select_column_add"
+            android:drawableStart="@drawable/ic_add_black_36dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id = "@+id/export_select_column_del"
+            android:drawableStart="@drawable/ic_delete_black_36dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/export_view_column"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <!-- Просто отступ-->
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:text="Date"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/export_date_start"
+            android:inputType="datetime" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/export_date_finish"
+            android:inputType="datetime" />
+
+
+        <!-- Просто отступ-->
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:text="Export"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/export_start"
+            android:layout_width="wrap_content"
+            android:text="Start export"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="match_parent" />
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

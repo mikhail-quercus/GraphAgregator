@@ -399,12 +399,32 @@ public class ImportCSV extends Fragment implements View.OnClickListener {
                         Log.d(LOG_TAG, writeCalendar + " "  +writeValue);
 
                     }
-                    else
-                    {
-                        Log.d(LOG_TAG, "Не получилось создать новый столбец");
+                    // SUM
+                    if(position_method_write_values == 1){
+                        // Очистим от минут и прочего мусора
+                        Calendar writeCalendar = CalendarComplement.clearTrash(RowDate);
+
+                        int writeValue = 1;
+
+                        boolean isWriteInTableSacsesful =  dbHelper.updateDataAndSum(db, writeCalendar, KEY_XXX, writeValue);
+
+                        Log.d(LOG_TAG, String.valueOf(isWriteInTableSacsesful));
+                        Log.d(LOG_TAG, writeCalendar + " "  +writeValue);
+
                     }
+                    // MAX
+                    if(position_method_write_values == 2){
+                        // Очистим от минут и прочего мусора
+                        Calendar writeCalendar = CalendarComplement.clearTrash(RowDate);
 
+                        int writeValue = 1;
 
+                        boolean isWriteInTableSacsesful =  dbHelper.updateDataAndSum(db, writeCalendar, KEY_XXX, writeValue);
+
+                        Log.d(LOG_TAG, String.valueOf(isWriteInTableSacsesful));
+                        Log.d(LOG_TAG, writeCalendar + " "  +writeValue);
+
+                    }
 
 
                 }

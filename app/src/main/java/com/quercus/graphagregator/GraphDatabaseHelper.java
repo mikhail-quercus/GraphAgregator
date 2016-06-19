@@ -23,10 +23,10 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
     public static final String DB_TABLE_NAME = "Data";
 
     public static final String KEY_ID = "_id";
-    public static final String KEY_DATE = "date";
-    public static final String KEY_STEP = "step";
-    public static final String KEY_MONEY = "money";
-    public static final String KEY_SLEEP = "sleep";
+    public static final String KEY_DATE = "milliseconds";
+    public static final String KEY_STEP = "steps";
+    public static final String KEY_MONEY = "moneys";
+    public static final String KEY_SLEEP = "hours of sleep";
 
     public GraphDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -445,7 +445,6 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
 
-
         // Перевод в UNIX-time для записи в БД времени
         contentValues.put(KEY_DATE, data_time.getTimeInMillis());
         contentValues.put(KEY_XXX, xxx);
@@ -482,6 +481,33 @@ public class GraphDatabaseHelper  extends SQLiteOpenHelper {
         return true;
     }
 
+
+    public boolean updateDataAndMax(SQLiteDatabase db, Calendar data_time, String KEY_XXX ,int xxx){
+
+
+        // Это запись пытается добавиться раньше чем была создана эта таблица
+        Calendar firstDateInTable = getFirstDate(db);
+        if(data_time.getTimeInMillis() < firstDateInTable.getTimeInMillis() )
+            return false;
+
+        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues_old = new ContentValues();
+
+        int xxx_old = getIntToDate(db, KEY_XXX, data_time);
+
+        int xxx_finish = Math.max(xxx_old, xxx);
+
+        // Перевод в UNIX-time для записи в БД времени
+        contentValues.put(KEY_DATE, data_time.getTimeInMillis());
+        contentValues.put(KEY_XXX, xxx_finish);
+
+
+
+        //db.insert(DB_TABLE_NAME, null, contentValues);
+        int numberUpdateRecords  = db.update(DB_TABLE_NAME, contentValues, KEY_DATE + " = ?", new String[]{String.valueOf(data_time.getTimeInMillis())} );
+
+        return true;
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

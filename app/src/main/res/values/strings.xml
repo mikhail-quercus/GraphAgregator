@@ -50,6 +50,8 @@
     <string name="error_problem_reading_csv_file">ERROR: Not found file. Please check the availability of the device memory.</string>
     <string name="error_parsing_csv_file">ERROR: Incorrect file structure.</string>
     <string name="error_not_correct_name_column">ERROR: Incorrect column name. Check that the name does not contain special characters.</string>
+    <string name="error_not_correct_name_file">ERROR: Incorrect file name.</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

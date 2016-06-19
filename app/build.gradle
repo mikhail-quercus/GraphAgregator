@@ -22,6 +22,7 @@ android {
 // GoogleFit
 dependencies {
     compile 'com.google.android.gms:play-services-fitness:8.4.0'
+    compile files('libs/mpandroidchartlibrary-2-2-4.jar')
 }
 
 dependencies {
